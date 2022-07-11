@@ -5,6 +5,6 @@
         "checkJs": true,
         "strict": true
     },
-    "include": ["index.js", "test.js"],
+    "include": ["**/*.js"],
     "exclude": ["node_modules"]
 }
