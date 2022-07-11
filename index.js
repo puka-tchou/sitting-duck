@@ -17,8 +17,9 @@ let iteration = 0;
 /**
  * @param {string} source Le chemin vers le fichier source.
  * @param {string} output Le chemin vers le fichier minifié et transformé.
+ * @param {number} numFiles Le nombre total de fichiers.
  */
-const logResult = (source, output) => {
+const logResult = (source, output, numFiles) => {
     const sourceSize = fs.statSync(source).size;
     const outSize = fs.statSync(output).size;
     const filename = source.length >= 60 ? source.slice(source.length - 60) : source.padEnd(60);
@@ -38,12 +39,13 @@ const logResult = (source, output) => {
         )} (${Intl.NumberFormat("fr-Fr", {
             maximumFractionDigits: 2,
             style: "percent",
+            signDisplay: "exceptZero",
         }).format((outSize - sourceSize) / sourceSize)})`
     );
 
     // Si on a terminé de traiter tous les fichiers, l'itération actuelle correspond à la longueur du tableau d'entrées.
     // On affiche les totaux : pourcentage de poids et différence en Mo.
-    if (iteration === [...jsEntryPoints, ...cssEntryPoints].length) {
+    if (iteration === numFiles) {
         console.log(
             `Total: ${Intl.NumberFormat("fr-FR", {
                 style: "unit",
@@ -56,10 +58,12 @@ const logResult = (source, output) => {
             }).format(totOutSize / 1_000_000)} (${Intl.NumberFormat("fr-Fr", {
                 maximumFractionDigits: 2,
                 style: "percent",
+                signDisplay: "exceptZero",
             }).format((totOutSize - totSourceSize) / totSourceSize)} / ${Intl.NumberFormat("fr-FR", {
                 style: "unit",
                 unit: "megabyte",
                 unitDisplay: "short",
+                signDisplay: "exceptZero",
             }).format(((totSourceSize - totOutSize) / 1_000_000) * -1)})`
         );
     }
@@ -206,6 +210,7 @@ const development = (entry) => {
  */
 const production = (entries) => {
     const { jsFiles, cssFiles } = entries;
+    const numFiles = [...jsFiles, ...cssFiles].length;
 
     jsFiles.forEach((source) => {
         /** Le chemin vers le fichier minifié */
@@ -232,7 +237,7 @@ const production = (entries) => {
                         if (result.errors.length > 0 || result.warnings.length > 0) {
                             console.log(result);
                         }
-                        logResult(source, out);
+                        logResult(source, out, numFiles);
                     });
             } else {
                 swc.minify(data, {
@@ -245,7 +250,7 @@ const production = (entries) => {
                         if (writeError) {
                             console.log(`Could not write the file: ${writeError}`);
                         } else {
-                            logResult(source, out);
+                            logResult(source, out, numFiles);
                         }
                     });
                 });
@@ -264,7 +269,7 @@ const production = (entries) => {
                 if (writeError) {
                     console.log(`Could not write the file: ${writeError}`);
                 } else {
-                    logResult(sourceFile, out);
+                    logResult(sourceFile, out, numFiles);
                 }
             });
         });

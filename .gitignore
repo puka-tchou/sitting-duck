@@ -1,5 +1,5 @@
 node_modules/
 *.min.js
-*.min.map.js
+*.min.js.map
 *.min.css
-*.min.map.css
+*.min.css.map
