@@ -141,16 +141,16 @@ const development = (entry) => {
                         watch: {
                             onRebuild(error) {
                                 if (error) {
-                                    console.error(`${Math.floor(Date.now() / 1000)} Build failed: ${error}`);
+                                    console.error(`${new Date().toLocaleTimeString()} Build failed: ${error}`);
                                 } else {
-                                    console.log(`${Math.floor(Date.now() / 1000)} File ${path} has been added`);
+                                    console.log(`${new Date().toLocaleTimeString()} File ${path} has been added`);
                                 }
                             },
                         },
                     });
                 } else {
                     fs.copyFile(path, outfile, () => {
-                        console.log(`${Math.floor(Date.now() / 1000)} File ${path} has been added`);
+                        console.log(`${new Date().toLocaleTimeString()} File ${path} has been added`);
                     });
                 }
             });
@@ -173,16 +173,16 @@ const development = (entry) => {
                         watch: {
                             onRebuild(error) {
                                 if (error) {
-                                    console.error(`${Math.floor(Date.now() / 1000)} Build failed: ${error}`);
+                                    console.error(`${new Date().toLocaleTimeString()} Build failed: ${error}`);
                                 } else {
-                                    console.log(`${Math.floor(Date.now() / 1000)} File ${path} has been changed`);
+                                    console.log(`${new Date().toLocaleTimeString()} File ${path} has been changed`);
                                 }
                             },
                         },
                     });
                 } else {
                     fs.copyFile(path, outfile, () => {
-                        console.log(`${Math.floor(Date.now() / 1000)} File ${path} has been changed`);
+                        console.log(`${new Date().toLocaleTimeString()} File ${path} has been changed`);
                     });
                 }
             });
@@ -191,10 +191,10 @@ const development = (entry) => {
             const outfile = getminpath(path);
             fs.rm(outfile, (err) => {
                 if (err) {
-                    console.log(`${Math.floor(Date.now() / 1000)} Could not remove the file: ${err}`);
+                    console.log(`${new Date().toLocaleTimeString()} Could not remove the file: ${err}`);
                 } else {
                     console.log(
-                        `${Math.floor(Date.now() / 1000)} File ${outfile} was removed because ${path} was removed.`
+                        `${new Date().toLocaleTimeString()} File ${outfile} was removed because ${path} was removed.`
                     );
                 }
             });
