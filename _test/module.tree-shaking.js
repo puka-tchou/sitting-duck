@@ -1,3 +1,6 @@
+// @MODULE
+import * as turf from "@turf/turf";
+
 const from = turf.point([-75.343, 39.984]);
 const to = turf.point([-75.534, 39.123]);
 const options = { units: "miles" };

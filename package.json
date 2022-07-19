@@ -1,10 +1,12 @@
 {
   "name": "minifier",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Le script de minification utilisé par SOGEFI.",
   "main": "index.js",
   "scripts": {
-    "test": "node ./test.js"
+    "test:build": "node ./test.js",
+    "test:dev": "node ./test.js --dev",
+    "ci-install": "GIT_SSH_COMMAND=ssh npm ci"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +20,8 @@
     "globby": "13.1.2"
   },
   "devDependencies": {
+    "@turf/distance": "^6.5.0",
+    "@turf/helpers": "^6.5.0",
     "@turf/turf": "6.5.0"
   }
 }
