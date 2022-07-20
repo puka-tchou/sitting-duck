@@ -1,28 +1,27 @@
-/* eslint-disable compat/compat */
-import swc from "@swc/core";
-import chokidar from "chokidar";
+import * as swc from "@swc/core";
+import * as chokidar from "chokidar";
 import { minify as minifyCss } from "csso";
-import esbuild from "esbuild";
-import fs from "fs";
+import * as esbuild from "esbuild";
+import * as fs from "fs";
 import { globbySync } from "globby";
 import { extname } from "path";
 
-/** @type {esbuild.CommonOptions['target']} */
-const target = [];
+const target: esbuild.CommonOptions["target"] = [];
 
 let totSourceSize = 0;
 let totOutSize = 0;
 let iteration = 0;
 
 /**
- * @param {string} source Le chemin vers le fichier source.
- * @param {string} output Le chemin vers le fichier minifié et transformé.
- * @param {number} numFiles Le nombre total de fichiers.
+ * @param source Le chemin vers le fichier source.
+ * @param output Le chemin vers le fichier minifié et transformé.
+ * @param numFiles Le nombre total de fichiers.
  */
-const logResult = (source, output, numFiles) => {
+const logResult = (source: string, output: string, numFiles: number) => {
   const sourceSize = fs.statSync(source).size;
   const outSize = fs.statSync(output).size;
-  const filename = source.length >= 60 ? source.slice(source.length - 60) : source.padEnd(60);
+  const filename =
+    source.length >= 60 ? source.slice(source.length - 60) : source.padEnd(60);
 
   // On accumule la taille totale des fichiers source et des fichiers minifiés.
   totSourceSize += sourceSize;
@@ -32,11 +31,15 @@ const logResult = (source, output, numFiles) => {
   // On affiche dans la console le nom du fichier source, sa taille originale, sa taille finale et la différence entre
   // les deux en pourcentage.
   console.log(
-    `${filename}: ${Intl.NumberFormat("fr-FR", { style: "unit", unit: "byte", unitDisplay: "long" }).format(
-      sourceSize
-    )} > ${Intl.NumberFormat("fr-Fr", { style: "unit", unit: "byte", unitDisplay: "long" }).format(
-      outSize
-    )} (${Intl.NumberFormat("fr-Fr", {
+    `${filename}: ${Intl.NumberFormat("fr-FR", {
+      style: "unit",
+      unit: "byte",
+      unitDisplay: "long",
+    }).format(sourceSize)} > ${Intl.NumberFormat("fr-Fr", {
+      style: "unit",
+      unit: "byte",
+      unitDisplay: "long",
+    }).format(outSize)} (${Intl.NumberFormat("fr-Fr", {
       maximumFractionDigits: 2,
       style: "percent",
       signDisplay: "exceptZero",
@@ -59,7 +62,9 @@ const logResult = (source, output, numFiles) => {
         maximumFractionDigits: 2,
         style: "percent",
         signDisplay: "exceptZero",
-      }).format((totOutSize - totSourceSize) / totSourceSize)} / ${Intl.NumberFormat("fr-FR", {
+      }).format(
+        (totOutSize - totSourceSize) / totSourceSize
+      )} / ${Intl.NumberFormat("fr-FR", {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
@@ -70,11 +75,12 @@ const logResult = (source, output, numFiles) => {
 };
 
 /**
- * Surveille une liste de fichiers et écrit les versions minifiées à chaque changement de la source.
+ * Surveille une liste de fichiers et écrit les versions minifiées à chaque
+ * changement de la source.
  *
- * @param {string[]} entry Les chemins vers les fichiers à surveiller.
+ * @param entry Les chemins vers les fichiers à surveiller.
  */
-const development = (entry) => {
+const development = (entry: string[]) => {
   // Initialize watcher.
   const watcher = chokidar.watch(entry, {
     persistent: true,
@@ -84,23 +90,25 @@ const development = (entry) => {
    * @param {string} path Le chemin du fichier source.
    * @returns Le chemin fourni avec `.min` ajouté devant l'extension.
    */
-  const getminpath = (path) =>
+  const getminpath = (path: string) =>
     extname(path).length > 0
-      ? `${path.slice(0, path.length - extname(path).length)}.min${path.slice(-extname(path).length)}`
+      ? `${path.slice(0, path.length - extname(path).length)}.min${path.slice(
+          -extname(path).length
+        )}`
       : path;
 
   /**
    * Lit la première ligne d'un fichier.
    *
-   * @param {string} path Chemin d'accès au fichier à lire.
    * @returns Une promesse qui se résout à la première ligne du fichier.
+   * @parampath Chemin d'accès au fichier à lire.
    */
-  const readfirstline = (path) => {
+  const readfirstline = (path: string) => {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(path, { encoding: "utf8" });
       let accumulator = "";
       let position = 0;
-      let index;
+      let index: number;
 
       stream
         .on("data", (chunk) => {
@@ -141,16 +149,22 @@ const development = (entry) => {
             watch: {
               onRebuild(error) {
                 if (error) {
-                  console.error(`${new Date().toLocaleTimeString()} Build failed: ${error}`);
+                  console.error(
+                    `${new Date().toLocaleTimeString()} Build failed: ${error}`
+                  );
                 } else {
-                  console.log(`${new Date().toLocaleTimeString()} File ${path} has been changed`);
+                  console.log(
+                    `${new Date().toLocaleTimeString()} File ${path} has been changed`
+                  );
                 }
               },
             },
           });
         } else {
           fs.copyFile(path, outfile, () => {
-            console.log(`${new Date().toLocaleTimeString()} File ${path} has been added`);
+            console.log(
+              `${new Date().toLocaleTimeString()} File ${path} has been added`
+            );
           });
         }
       });
@@ -173,16 +187,22 @@ const development = (entry) => {
             watch: {
               onRebuild(error) {
                 if (error) {
-                  console.error(`${new Date().toLocaleTimeString()} Build failed: ${error}`);
+                  console.error(
+                    `${new Date().toLocaleTimeString()} Build failed: ${error}`
+                  );
                 } else {
-                  console.log(`${new Date().toLocaleTimeString()} File ${path} has been changed`);
+                  console.log(
+                    `${new Date().toLocaleTimeString()} File ${path} has been changed`
+                  );
                 }
               },
             },
           });
         } else {
           fs.copyFile(path, outfile, () => {
-            console.log(`${new Date().toLocaleTimeString()} File ${path} has been changed`);
+            console.log(
+              `${new Date().toLocaleTimeString()} File ${path} has been changed`
+            );
           });
         }
       });
@@ -191,9 +211,13 @@ const development = (entry) => {
       const outfile = getminpath(path);
       fs.rm(outfile, (err) => {
         if (err) {
-          console.log(`${new Date().toLocaleTimeString()} Could not remove the file: ${err}`);
+          console.log(
+            `${new Date().toLocaleTimeString()} Could not remove the file: ${err}`
+          );
         } else {
-          console.log(`${new Date().toLocaleTimeString()} File ${outfile} was removed because ${path} was removed.`);
+          console.log(
+            `${new Date().toLocaleTimeString()} File ${outfile} was removed because ${path} was removed.`
+          );
         }
       });
     });
@@ -206,9 +230,9 @@ const development = (entry) => {
 /**
  * Minifie et bundle les fichiers JS et CSS.
  *
- * @param {{ jsFiles: string[]; cssFiles: string[] }} entries La liste des fichiers source.
+ * @param entries La liste des fichiers source.
  */
-const production = (entries) => {
+const production = (entries: { jsFiles: string[]; cssFiles: string[] }) => {
   const { jsFiles, cssFiles } = entries;
   const numFiles = [...jsFiles, ...cssFiles].length;
 
@@ -248,13 +272,18 @@ const production = (entries) => {
             mangle: false,
           })
           .then((output) => {
-            fs.writeFile(out, output.code, { encoding: "utf-8" }, (writeError) => {
-              if (writeError) {
-                console.log(`Could not write the file: ${writeError}`);
-              } else {
-                logResult(source, out, numFiles);
+            fs.writeFile(
+              out,
+              output.code,
+              { encoding: "utf-8" },
+              (writeError) => {
+                if (writeError) {
+                  console.log(`Could not write the file: ${writeError}`);
+                } else {
+                  logResult(source, out, numFiles);
+                }
               }
-            });
+            );
           });
       }
     });
@@ -279,15 +308,16 @@ const production = (entries) => {
 };
 
 /**
- * @param {string[]} [js] La liste des fichiers Javascript à traiter, ou un glob.
- * @param {string[]} [css] La liste des fichiers CSS à traiter, ou un glob.
- * @param {string} [mode] Le mode à utiliser `'dev'` ou `'build'`. `'dev'` par défaut.
- *
+ * @param js La liste des fichiers Javascript à traiter, ou un glob.
+ * @param css La liste des fichiers CSS à traiter, ou un glob.
+ * @param mode Le mode à utiliser `'dev'` ou `'build'`. `'dev'` par défaut.
  * @see https://github.com/sindresorhus/globby#globbing-patterns
  */
-const main = (js, css, mode) => {
-  const jsFiles = js ?? globbySync(["**/*.js", "!node_modules/", "!**/*.min.js"]);
-  const cssFiles = css ?? globbySync(["**/*.css", "!node_modules/", "!**/*.min.css"]);
+const main = (js: string[], css: string[], mode: string) => {
+  const jsFiles =
+    js ?? globbySync(["**/*.js", "!node_modules/", "!**/*.min.js"]);
+  const cssFiles =
+    css ?? globbySync(["**/*.css", "!node_modules/", "!**/*.min.css"]);
 
   const isProduction = mode === "build";
 
@@ -298,4 +328,4 @@ const main = (js, css, mode) => {
   }
 };
 
-export { main as minify };
+export { main as default };
