@@ -1,5 +1,6 @@
 node_modules/
 build/
+_types/
 *.min.js
 *.min.js.map
 *.min.css

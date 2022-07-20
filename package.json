@@ -1,13 +1,20 @@
 {
-  "name": "minifier",
+  "name": "sitting-duck",
   "version": "2.0.0",
-  "description": "Le script de minification utilisé par SOGEFI.",
-  "main": "index.js",
+  "description": "A legacy minifier combination that can handles ES6 import/export style and script styles without breaking your codebase.",
+  "main": "build/index.js",
+  "files": [
+    "index.ts",
+    "build/index.ts",
+    "_types/index.d.ts",
+    "_types/index.d.ts.map"
+  ],
   "scripts": {
     "test:build": "node ./build/test.js",
     "test:dev": "node ./build/test.js --dev",
     "ci-install": "GIT_SSH_COMMAND=ssh npm ci",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "tsc"
   },
   "keywords": [],
   "author": "",
