@@ -13,9 +13,9 @@ let totOutSize = 0;
 let iteration = 0;
 
 /**
- * @param source Le chemin vers le fichier source.
- * @param output Le chemin vers le fichier minifié et transformé.
- * @param numFiles Le nombre total de fichiers.
+ * @param source The path to the source file.
+ * @param output The path to the minified and transformed file.
+ * @param numFiles The total number of files.
  */
 const logResult = (source: string, output: string, numFiles: number) => {
   const sourceSize = fs.statSync(source).size;
@@ -23,48 +23,48 @@ const logResult = (source: string, output: string, numFiles: number) => {
   const filename =
     source.length >= 60 ? source.slice(source.length - 60) : source.padEnd(60);
 
-  // On accumule la taille totale des fichiers source et des fichiers minifiés.
+  // The total size of the source and minified files is accumulated.
   totSourceSize += sourceSize;
   totOutSize += outSize;
   iteration++;
 
-  // On affiche dans la console le nom du fichier source, sa taille originale, sa taille finale et la différence entre
-  // les deux en pourcentage.
+  // We display in the console the name of the source file, its original size, its final size and the difference
+  // between the two in percentage.
   console.log(
-    `${filename}: ${Intl.NumberFormat("fr-FR", {
+    `${filename}: ${Intl.NumberFormat("en-US", {
       style: "unit",
       unit: "byte",
       unitDisplay: "long",
-    }).format(sourceSize)} > ${Intl.NumberFormat("fr-Fr", {
+    }).format(sourceSize)} > ${Intl.NumberFormat("en-US", {
       style: "unit",
       unit: "byte",
       unitDisplay: "long",
-    }).format(outSize)} (${Intl.NumberFormat("fr-Fr", {
+    }).format(outSize)} (${Intl.NumberFormat("en-US", {
       maximumFractionDigits: 2,
       style: "percent",
       signDisplay: "exceptZero",
     }).format((outSize - sourceSize) / sourceSize)})`
   );
 
-  // Si on a terminé de traiter tous les fichiers, l'itération actuelle correspond à la longueur du tableau d'entrées.
-  // On affiche les totaux : pourcentage de poids et différence en Mo.
+  // If all files have been processed, the current iteration is the length of the input array.
+  // The totals are displayed: weight percentage and difference in MB.
   if (iteration === numFiles) {
     console.log(
-      `Total: ${Intl.NumberFormat("fr-FR", {
+      `Total: ${Intl.NumberFormat("en-US", {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
-      }).format(totSourceSize / 1_000_000)} > ${Intl.NumberFormat("fr-FR", {
+      }).format(totSourceSize / 1_000_000)} > ${Intl.NumberFormat("en-US", {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
-      }).format(totOutSize / 1_000_000)} (${Intl.NumberFormat("fr-Fr", {
+      }).format(totOutSize / 1_000_000)} (${Intl.NumberFormat("en-US", {
         maximumFractionDigits: 2,
         style: "percent",
         signDisplay: "exceptZero",
       }).format(
         (totOutSize - totSourceSize) / totSourceSize
-      )} / ${Intl.NumberFormat("fr-FR", {
+      )} / ${Intl.NumberFormat("en-US", {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
@@ -75,10 +75,9 @@ const logResult = (source: string, output: string, numFiles: number) => {
 };
 
 /**
- * Surveille une liste de fichiers et écrit les versions minifiées à chaque
- * changement de la source.
+ * Monitors a list of files and writes minified versions whenever the source changes.
  *
- * @param entry Les chemins vers les fichiers à surveiller.
+ * @param entry The paths to the files to be monitored.
  */
 const development = (entry: string[]) => {
   // Initialize watcher.
@@ -87,8 +86,8 @@ const development = (entry: string[]) => {
   });
 
   /**
-   * @param {string} path Le chemin du fichier source.
-   * @returns Le chemin fourni avec `.min` ajouté devant l'extension.
+   * @param {string} path The path to the source file.
+   * @returns The path provided with `.min` added before the extension.
    */
   const getminpath = (path: string) =>
     extname(path).length > 0
@@ -98,10 +97,10 @@ const development = (entry: string[]) => {
       : path;
 
   /**
-   * Lit la première ligne d'un fichier.
+   * Reads the first line of a file.
    *
-   * @returns Une promesse qui se résout à la première ligne du fichier.
-   * @parampath Chemin d'accès au fichier à lire.
+   * @param path Path to the file to be read.
+   * @returns A promise that is resolved at the first line of the file.
    */
   const readfirstline = (path: string) => {
     return new Promise((resolve, reject) => {
@@ -129,6 +128,24 @@ const development = (entry: string[]) => {
     });
   };
 
+  /**
+   * Displays the result of the esbuild transpilation.
+   *
+   * @param error The esbuild error.
+   * @param path The path to the minified file.
+   */
+  const logRebuild = (error: esbuild.BuildFailure | null, path: string) => {
+    if (error) {
+      console.error(
+        `${new Date().toLocaleTimeString()} Build failed: ${error}`
+      );
+    } else {
+      console.log(
+        `${new Date().toLocaleTimeString()} File ${path} has been changed`
+      );
+    }
+  };
+
   // Add event listeners.
   watcher
     .on("add", (path) => {
@@ -148,15 +165,7 @@ const development = (entry: string[]) => {
             outfile,
             watch: {
               onRebuild(error) {
-                if (error) {
-                  console.error(
-                    `${new Date().toLocaleTimeString()} Build failed: ${error}`
-                  );
-                } else {
-                  console.log(
-                    `${new Date().toLocaleTimeString()} File ${path} has been changed`
-                  );
-                }
+                logRebuild(error, path);
               },
             },
           });
@@ -186,15 +195,7 @@ const development = (entry: string[]) => {
             outfile,
             watch: {
               onRebuild(error) {
-                if (error) {
-                  console.error(
-                    `${new Date().toLocaleTimeString()} Build failed: ${error}`
-                  );
-                } else {
-                  console.log(
-                    `${new Date().toLocaleTimeString()} File ${path} has been changed`
-                  );
-                }
+                logRebuild(error, path);
               },
             },
           });
@@ -228,23 +229,23 @@ const development = (entry: string[]) => {
 };
 
 /**
- * Minifie et bundle les fichiers JS et CSS.
+ * Minifies and bundles JS and CSS files.
  *
- * @param entries La liste des fichiers source.
+ * @param entries The list of source files.
  */
 const production = (entries: { jsFiles: string[]; cssFiles: string[] }) => {
   const { jsFiles, cssFiles } = entries;
   const numFiles = [...jsFiles, ...cssFiles].length;
 
   jsFiles.forEach((source) => {
-    /** Le chemin vers le fichier minifié */
+    /** The path to the minified file */
     const out = source.replace(".js", ".min.js");
     fs.readFile(source, { encoding: "utf-8" }, (readError, data) => {
       if (readError) {
         console.error(readError);
       }
-      // Si la première ligne est un commentaire indiquant un module, on utilise esbuild,
-      // sinon on utilise swc.
+      // If the first line is a comment indicating a module,
+      // esbuild is used, otherwise swc is used.
       if (data.split("\n")[0] === `// @MODULE`) {
         console.log(`File ${source} is a module, switching to esbuild.`);
         esbuild
@@ -308,18 +309,23 @@ const production = (entries: { jsFiles: string[]; cssFiles: string[] }) => {
 };
 
 /**
- * @param js La liste des fichiers Javascript à traiter, ou un glob.
- * @param css La liste des fichiers CSS à traiter, ou un glob.
- * @param mode Le mode à utiliser `'dev'` ou `'build'`. `'dev'` par défaut.
+ * @param js The list of Javascript files to be processed, or a glob.
+ * @param css The list of CSS files to be processed, or a glob.
+ * @param mode The mode to use `'dev'` or `'build'`.
  * @see https://github.com/sindresorhus/globby#globbing-patterns
  */
-const main = (js: string[], css: string[], mode: string) => {
-  const jsFiles =
-    js ?? globbySync(["**/*.js", "!node_modules/", "!**/*.min.js"]);
-  const cssFiles =
-    css ?? globbySync(["**/*.css", "!node_modules/", "!**/*.min.css"]);
-
+const main = (js: string[] | string, css: string[] | string, mode: string) => {
+  const jsFiles = typeof js === "string" ? globbySync(js) : js;
+  const cssFiles = typeof css === "string" ? globbySync(css) : css;
   const isProduction = mode === "build";
+
+  if (typeof js === "string" || typeof css === "string") {
+    console.log(`minifying using an array of files\n`);
+  } else {
+    console.log(
+      `minifying using a glob pattern.\nread more on glob patterns at: https://github.com/sindresorhus/globby#globbing-patterns\n`
+    );
+  }
 
   if (!isProduction) {
     development([...jsFiles, ...cssFiles]);

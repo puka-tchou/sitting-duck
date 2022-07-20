@@ -4,9 +4,9 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/puka-tchou/sitting-duck.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/puka-tchou/sitting-duck/alerts/)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=puka-tchou_legacy-minifier&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=puka-tchou_legacy-minifier)
 
-_A legacy minifier combination that can handles ES6 import/export style and script styles without breaking your codebase._
+_A legacy minifier combination that can handle ES6 import/export style and script styles without breaking your codebase._
 
-You are working on a legacy project and you would like to progressively modernize it? That's a nice goal but good luck finding a bundler/minifier capable of handling **old-school script-style global variable based and copy-pasted libraries** as well as **modern ES6 import/export syntax and `node_modules/` dependencies** without forcing you to halt the project evolution for at least a month while you clean this mess.
+You are working on a legacy project and you would like to progressively modernize it? That's a nice goal but good luck finding a bundler/minifier capable of handling **old-school script-style global-variable based and copy-pasted libraries** as well as **modern ES6 import/export syntax and `node_modules/` dependencies** without forcing you to halt the project evolution for at least a month while you clean this mess.
 
 ## getting started
 
@@ -47,7 +47,7 @@ npm run build
 npm run dev
 ```
 
-_optionnaly update your .gitignore:_
+_optionally update your .gitignore:_
 
 ```
 *.min.js
@@ -58,7 +58,7 @@ _optionnaly update your .gitignore:_
 
 ## about this project
 
-The goals of this project are pretty straightforwards:
+The goals of this project are pretty straightforward:
 
 1. minify the legacy files without breaking the code
 2. bundle and minify the modern syntax
