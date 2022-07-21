@@ -30,16 +30,17 @@ const logResult = (source: string, output: string, numFiles: number) => {
 
   // We display in the console the name of the source file, its original size, its final size and the difference
   // between the two in percentage.
+  const locale = "en-US";
   console.log(
-    `${filename}: ${Intl.NumberFormat("en-US", {
+    `${filename}: ${Intl.NumberFormat(locale, {
       style: "unit",
       unit: "byte",
       unitDisplay: "long",
-    }).format(sourceSize)} > ${Intl.NumberFormat("en-US", {
+    }).format(sourceSize)} > ${Intl.NumberFormat(locale, {
       style: "unit",
       unit: "byte",
       unitDisplay: "long",
-    }).format(outSize)} (${Intl.NumberFormat("en-US", {
+    }).format(outSize)} (${Intl.NumberFormat(locale, {
       maximumFractionDigits: 2,
       style: "percent",
       signDisplay: "exceptZero",
@@ -50,21 +51,21 @@ const logResult = (source: string, output: string, numFiles: number) => {
   // The totals are displayed: weight percentage and difference in MB.
   if (iteration === numFiles) {
     console.log(
-      `Total: ${Intl.NumberFormat("en-US", {
+      `Total: ${Intl.NumberFormat(locale, {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
-      }).format(totSourceSize / 1_000_000)} > ${Intl.NumberFormat("en-US", {
+      }).format(totSourceSize / 1_000_000)} > ${Intl.NumberFormat(locale, {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
-      }).format(totOutSize / 1_000_000)} (${Intl.NumberFormat("en-US", {
+      }).format(totOutSize / 1_000_000)} (${Intl.NumberFormat(locale, {
         maximumFractionDigits: 2,
         style: "percent",
         signDisplay: "exceptZero",
       }).format(
         (totOutSize - totSourceSize) / totSourceSize
-      )} / ${Intl.NumberFormat("en-US", {
+      )} / ${Intl.NumberFormat(locale, {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
@@ -103,7 +104,7 @@ const development = (entry: string[]) => {
    * @returns A promise that is resolved at the first line of the file.
    */
   const readfirstline = (path: string) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<string>((resolve, reject) => {
       const stream = fs.createReadStream(path, { encoding: "utf8" });
       let accumulator = "";
       let position = 0;
@@ -146,6 +147,39 @@ const development = (entry: string[]) => {
     }
   };
 
+  const watch = (
+    firstLine: string,
+    path: string,
+    outfile: string,
+    changed: boolean
+  ) => {
+    if (firstLine === "// @MODULE") {
+      console.log(`File ${path} is a module, switching to esbuild.`);
+      watcher.unwatch(path);
+      void esbuild.build({
+        entryPoints: [path],
+        bundle: true,
+        minify: false,
+        sourcemap: true,
+        target,
+        treeShaking: false,
+        outfile,
+        watch: {
+          onRebuild(error) {
+            logRebuild(error, path);
+          },
+        },
+      });
+    } else {
+      fs.copyFile(path, outfile, () => {
+        const message = changed
+          ? `File ${path} has been added`
+          : `File ${path} has been changed`;
+        console.log(`${new Date().toLocaleTimeString()} ${message}`);
+      });
+    }
+  };
+
   // Add event listeners.
   watcher
     .on("add", (path) => {
@@ -153,30 +187,7 @@ const development = (entry: string[]) => {
 
       readfirstline(path)
         .then((firstLine) => {
-          if (firstLine === "// @MODULE") {
-            console.log(`File ${path} is a module, switching to esbuild.`);
-            watcher.unwatch(path);
-            void esbuild.build({
-              entryPoints: [path],
-              bundle: true,
-              minify: false,
-              sourcemap: true,
-              target,
-              treeShaking: false,
-              outfile,
-              watch: {
-                onRebuild(error) {
-                  logRebuild(error, path);
-                },
-              },
-            });
-          } else {
-            fs.copyFile(path, outfile, () => {
-              console.log(
-                `${new Date().toLocaleTimeString()} File ${path} has been added`
-              );
-            });
-          }
+          watch(firstLine, path, outfile, false);
         })
         .catch((reason) => {
           console.log(reason);
@@ -187,30 +198,7 @@ const development = (entry: string[]) => {
 
       readfirstline(path)
         .then((firstLine) => {
-          if (firstLine === "// @MODULE") {
-            console.log(`File ${path} is a module, switching to esbuild.`);
-            watcher.unwatch(path);
-            void esbuild.build({
-              entryPoints: [path],
-              bundle: true,
-              minify: false,
-              sourcemap: true,
-              target,
-              treeShaking: false,
-              outfile,
-              watch: {
-                onRebuild(error) {
-                  logRebuild(error, path);
-                },
-              },
-            });
-          } else {
-            fs.copyFile(path, outfile, () => {
-              console.log(
-                `${new Date().toLocaleTimeString()} File ${path} has been changed`
-              );
-            });
-          }
+          watch(firstLine, path, outfile, true);
         })
         .catch((reason) => {
           console.log(reason);
