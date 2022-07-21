@@ -14,6 +14,7 @@
     "_types/index.d.ts.map"
   ],
   "scripts": {
+    "lint": "eslint index.ts test.ts",
     "test:build": "npm run build && node ./build/test.js",
     "test:dev": "npm run build && node ./build/test.js --dev",
     "ci-install": "GIT_SSH_COMMAND=ssh npm ci",
@@ -37,6 +38,10 @@
     "@turf/turf": "6.5.0",
     "@types/csso": "^5.0.0",
     "@types/node": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.7",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
     "prettier": "^2.7.1",
     "prettier-plugin-jsdoc": "^0.3.38",
     "typescript": "^4.7.4"
