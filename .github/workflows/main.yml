@@ -9,7 +9,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    needs: ["install"]
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
