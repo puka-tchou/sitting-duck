@@ -137,7 +137,7 @@ const development = (entry: string[]) => {
   const logRebuild = (error: esbuild.BuildFailure | null, path: string) => {
     if (error) {
       console.error(
-        `${new Date().toLocaleTimeString()} Build failed: ${error}`
+        `${new Date().toLocaleTimeString()} Build failed: ${error.message}`
       );
     } else {
       console.log(
@@ -151,69 +151,79 @@ const development = (entry: string[]) => {
     .on("add", (path) => {
       const outfile = getminpath(path);
 
-      readfirstline(path).then((firstLine) => {
-        if (firstLine === "// @MODULE") {
-          console.log(`File ${path} is a module, switching to esbuild.`);
-          watcher.unwatch(path);
-          esbuild.build({
-            entryPoints: [path],
-            bundle: true,
-            minify: false,
-            sourcemap: true,
-            target,
-            treeShaking: false,
-            outfile,
-            watch: {
-              onRebuild(error) {
-                logRebuild(error, path);
+      readfirstline(path)
+        .then((firstLine) => {
+          if (firstLine === "// @MODULE") {
+            console.log(`File ${path} is a module, switching to esbuild.`);
+            watcher.unwatch(path);
+            void esbuild.build({
+              entryPoints: [path],
+              bundle: true,
+              minify: false,
+              sourcemap: true,
+              target,
+              treeShaking: false,
+              outfile,
+              watch: {
+                onRebuild(error) {
+                  logRebuild(error, path);
+                },
               },
-            },
-          });
-        } else {
-          fs.copyFile(path, outfile, () => {
-            console.log(
-              `${new Date().toLocaleTimeString()} File ${path} has been added`
-            );
-          });
-        }
-      });
+            });
+          } else {
+            fs.copyFile(path, outfile, () => {
+              console.log(
+                `${new Date().toLocaleTimeString()} File ${path} has been added`
+              );
+            });
+          }
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
     })
     .on("change", (path) => {
       const outfile = getminpath(path);
 
-      readfirstline(path).then((firstLine) => {
-        if (firstLine === "// @MODULE") {
-          console.log(`File ${path} is a module, switching to esbuild.`);
-          watcher.unwatch(path);
-          esbuild.build({
-            entryPoints: [path],
-            bundle: true,
-            minify: false,
-            sourcemap: true,
-            target,
-            treeShaking: false,
-            outfile,
-            watch: {
-              onRebuild(error) {
-                logRebuild(error, path);
+      readfirstline(path)
+        .then((firstLine) => {
+          if (firstLine === "// @MODULE") {
+            console.log(`File ${path} is a module, switching to esbuild.`);
+            watcher.unwatch(path);
+            void esbuild.build({
+              entryPoints: [path],
+              bundle: true,
+              minify: false,
+              sourcemap: true,
+              target,
+              treeShaking: false,
+              outfile,
+              watch: {
+                onRebuild(error) {
+                  logRebuild(error, path);
+                },
               },
-            },
-          });
-        } else {
-          fs.copyFile(path, outfile, () => {
-            console.log(
-              `${new Date().toLocaleTimeString()} File ${path} has been changed`
-            );
-          });
-        }
-      });
+            });
+          } else {
+            fs.copyFile(path, outfile, () => {
+              console.log(
+                `${new Date().toLocaleTimeString()} File ${path} has been changed`
+              );
+            });
+          }
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
     })
     .on("unlink", (path) => {
       const outfile = getminpath(path);
-      fs.rm(outfile, (err) => {
-        if (err) {
+      fs.rm(outfile, (error) => {
+        if (error) {
           console.log(
-            `${new Date().toLocaleTimeString()} Could not remove the file: ${err}`
+            `${new Date().toLocaleTimeString()} Could not remove the file: ${
+              error.message
+            }`
           );
         } else {
           console.log(
@@ -224,7 +234,7 @@ const development = (entry: string[]) => {
     });
 
   watcher
-    .on("error", (error) => console.log(`Watcher error: ${error}`))
+    .on("error", (error) => console.log(`Watcher error: ${error.message}`))
     .on("ready", () => console.log(`Initial scan complete. Ready for changes`));
 };
 
@@ -263,6 +273,12 @@ const production = (entries: { jsFiles: string[]; cssFiles: string[] }) => {
               console.log(result);
             }
             logResult(source, out, numFiles);
+          })
+          .catch((reason) => {
+            console.trace(
+              `Build (esbuild) failed for ${source} with error: %o`,
+              reason
+            );
           });
       } else {
         swc
@@ -279,11 +295,19 @@ const production = (entries: { jsFiles: string[]; cssFiles: string[] }) => {
               { encoding: "utf-8" },
               (writeError) => {
                 if (writeError) {
-                  console.log(`Could not write the file: ${writeError}`);
+                  console.log(
+                    `Could not write the file: ${writeError.message}`
+                  );
                 } else {
                   logResult(source, out, numFiles);
                 }
               }
+            );
+          })
+          .catch((reason) => {
+            console.trace(
+              `Build (swc) failed for ${source} with error: %o`,
+              reason
             );
           });
       }
@@ -299,7 +323,7 @@ const production = (entries: { jsFiles: string[]; cssFiles: string[] }) => {
       const css = minifyCss(data).css;
       fs.writeFile(out, css, { encoding: "utf-8" }, (writeError) => {
         if (writeError) {
-          console.log(`Could not write the file: ${writeError}`);
+          console.log(`Could not write the file: ${writeError.message}`);
         } else {
           logResult(sourceFile, out, numFiles);
         }
