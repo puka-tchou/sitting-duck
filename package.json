@@ -14,7 +14,7 @@
     "_types/index.d.ts.map"
   ],
   "scripts": {
-    "lint": "eslint index.ts test.ts",
+    "lint": "eslint index.ts test.ts src/",
     "test:build": "npm run build && node ./build/test.js",
     "test:dev": "npm run build && node ./build/test.js --dev",
     "ci-install": "GIT_SSH_COMMAND=ssh npm ci",

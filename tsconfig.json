@@ -6,6 +6,7 @@
     "declarationDir": "_types/",
     "declarationMap": true,
     "listEmittedFiles": true,
+    "module": "ES6",
     "moduleResolution": "node",
     "outDir": "build/",
     "strict": true,
