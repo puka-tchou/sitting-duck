@@ -9,9 +9,9 @@
   "main": "build/index.js",
   "files": [
     "index.ts",
-    "build/index.ts",
-    "_types/index.d.ts",
-    "_types/index.d.ts.map"
+    "test.ts",
+    "build/",
+    "_types/"
   ],
   "scripts": {
     "lint": "eslint index.ts test.ts src/",
