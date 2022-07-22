@@ -13,12 +13,12 @@ You are working on a legacy project and you would like to progressively moderniz
 create a file named `minify.mjs`:
 
 ```js
-import { globbySync } from "globby";
 import minify from "sitting-duck";
 
+// You can either pass a string that will be interpreted as a glob pattern by globby or an array of files.
 minify(
-  globbySync(["**/*.js", "!node_modules/", "!**/*.min.js"]), // These would be your JS files
-  globbySync(["**/*.css", "!node_modules/", "!**/*.min.css"]), // Here are your CSS files
+  `"**/*.js", "!node_modules/", "!**/*.min.js"`, // These would be your JS files
+  `"**/*.css", "!node_modules/", "!**/*.min.css"`, // Here are your CSS files
   process.argv[2]?.split("--")[1] ?? "build"
 );
 ```
@@ -26,7 +26,7 @@ minify(
 install the required dependencies:
 
 ```shell-session
-npm i -D sitting-duck globby
+npm i -D sitting-duck
 ```
 
 update your `package.json`:
@@ -49,11 +49,12 @@ npm run dev
 
 _optionally update your .gitignore:_
 
-```
+```text
 *.min.js
 *.min.js.map
 *.min.css
 *.min.css.map
+*.LEGAL.txt
 ```
 
 ## about this project
