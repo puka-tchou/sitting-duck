@@ -17,5 +17,5 @@
     "tsconfigRootDir": "",
     "project": ["./tsconfig.json"]
   },
-  "ignorePatterns": ["*.min.js", "build/"]
+  "ignorePatterns": ["*.min.js", "build/", "*.d.ts"]
 }

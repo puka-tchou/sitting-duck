@@ -17,7 +17,7 @@ export const development = (entry: string[]) => {
   });
 
   /**
-   * @param {string} path The path to the source file.
+   * @param path The path to the source file.
    * @returns The path provided with `.min` added before the extension.
    */
   const getminpath = (path: string) =>
