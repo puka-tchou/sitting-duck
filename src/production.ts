@@ -98,11 +98,15 @@ export const production = (entries: {
           .build({
             entryPoints: [source],
             bundle: true,
+            drop: ["console", "debugger"],
+            format: "iife",
+            platform: "browser",
             minify: true,
             sourcemap: true,
             target,
             treeShaking: true,
             outfile: out,
+            legalComments: "linked",
           })
           .then((result) => {
             if (result.errors.length > 0 || result.warnings.length > 0) {
@@ -121,8 +125,11 @@ export const production = (entries: {
         .minify(data, {
           compress: {
             drop_console: true,
+            drop_debugger: true,
           },
           mangle: false,
+          sourceMap: true,
+          module: false,
         })
         .then((output) => {
           fs.writeFile(
@@ -138,6 +145,20 @@ export const production = (entries: {
               logResult(source, out, numFiles);
             }
           );
+          if (output.map) {
+            fs.writeFile(
+              `${out}.map`,
+              output.map,
+              { encoding: "utf-8" },
+              (writeError) => {
+                if (writeError) {
+                  console.log(
+                    `Could not write the source map (this is probably fine): ${writeError.message}`
+                  );
+                }
+              }
+            );
+          }
         })
         .catch((reason) => {
           console.log(reason);
