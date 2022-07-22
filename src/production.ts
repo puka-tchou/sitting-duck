@@ -110,43 +110,39 @@ export const production = (entries: {
             }
             logResult(source, out, numFiles);
           })
-          .catch((reason) => {
-            console.trace(
-              `Build (esbuild) failed for ${source} with error: %o`,
-              reason
-            );
+          .catch(() => {
+            console.log(`esbuild failed on ${source}`);
           });
-      } else {
-        swc
-          .minify(data, {
-            compress: {
-              drop_console: true,
-            },
-            mangle: false,
-          })
-          .then((output) => {
-            fs.writeFile(
-              out,
-              output.code,
-              { encoding: "utf-8" },
-              (writeError) => {
-                if (writeError) {
-                  console.log(
-                    `Could not write the file: ${writeError.message}`
-                  );
-                } else {
-                  logResult(source, out, numFiles);
-                }
-              }
-            );
-          })
-          .catch((reason) => {
-            console.trace(
-              `Build (swc) failed for ${source} with error: %o`,
-              reason
-            );
-          });
+
+        return;
       }
+
+      swc
+        .minify(data, {
+          compress: {
+            drop_console: true,
+          },
+          mangle: false,
+        })
+        .then((output) => {
+          fs.writeFile(
+            out,
+            output.code,
+            { encoding: "utf-8" },
+            (writeError) => {
+              if (writeError) {
+                console.log(`Could not write the file: ${writeError.message}`);
+                return;
+              }
+
+              logResult(source, out, numFiles);
+            }
+          );
+        })
+        .catch((reason) => {
+          console.log(reason);
+          console.log(`swc failed on ${source}`);
+        });
     });
   });
 
@@ -160,9 +156,10 @@ export const production = (entries: {
       fs.writeFile(out, css, { encoding: "utf-8" }, (writeError) => {
         if (writeError) {
           console.log(`Could not write the file: ${writeError.message}`);
-        } else {
-          logResult(sourceFile, out, numFiles);
+          return;
         }
+
+        logResult(sourceFile, out, numFiles);
       });
     });
   });

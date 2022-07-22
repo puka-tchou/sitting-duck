@@ -86,20 +86,24 @@ export const development = (entry: string[]) => {
     if (firstLine === "// @MODULE") {
       console.log(`File ${path} is a module, switching to esbuild.`);
       watcher.unwatch(path);
-      void esbuild.build({
-        entryPoints: [path],
-        bundle: true,
-        minify: false,
-        sourcemap: true,
-        target,
-        treeShaking: false,
-        outfile,
-        watch: {
-          onRebuild(error) {
-            logRebuild(error, path);
+      esbuild
+        .build({
+          entryPoints: [path],
+          bundle: true,
+          minify: false,
+          sourcemap: true,
+          target,
+          treeShaking: false,
+          outfile,
+          watch: {
+            onRebuild(error) {
+              logRebuild(error, path);
+            },
           },
-        },
-      });
+        })
+        .catch((reason) => {
+          console.log(`esbuild failed with error: %o`, reason);
+        });
     } else {
       fs.copyFile(path, outfile, () => {
         const message = changed
