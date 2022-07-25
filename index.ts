@@ -14,11 +14,11 @@ const main = (js: string[] | string, css: string[] | string, mode: string) => {
   const isProduction = mode === "build";
 
   if (typeof js === "string" || typeof css === "string") {
-    console.log(`minifying using an array of files\n`);
-  } else {
     console.log(
       `minifying using a glob pattern.\nread more on glob patterns at: https://github.com/sindresorhus/globby#globbing-patterns\n`
     );
+  } else {
+    console.log(`minifying using an array of files\n`);
   }
 
   if (!isProduction) {

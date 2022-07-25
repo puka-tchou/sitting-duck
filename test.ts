@@ -9,6 +9,7 @@ const test = () => {
     [
       path.join(cwd(), "_test/script.js"),
       path.join(cwd(), "_test/module.js"),
+      path.join(cwd(), "_test/module-crlf.js"),
       path.join(cwd(), "_test/module.tree-shaking.js"),
     ],
     [path.join(cwd(), "_test/index.css")],

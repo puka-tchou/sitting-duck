@@ -33,25 +33,21 @@ export const development = (entry: string[]) => {
    * @param path Path to the file to be read.
    * @returns A promise that is resolved at the first line of the file.
    */
-  const readfirstline = (path: string) => {
-    return new Promise<string>((resolve, reject) => {
+  const hasModuleComment = (path: string) => {
+    return new Promise<boolean>((resolve, reject) => {
       const stream = fs.createReadStream(path, { encoding: "utf8" });
-      let accumulator = "";
-      let position = 0;
-      let index: number;
+      const comment = `// @MODULE`;
+      let string = "";
 
       stream
         .on("data", (chunk) => {
-          index = chunk.indexOf("\n");
-          accumulator += chunk;
-          if (index !== -1) {
+          if (typeof chunk === "string") {
+            string = chunk;
             stream.close();
-          } else {
-            position += chunk.length;
           }
         })
         .on("close", () => {
-          resolve(accumulator.slice(0, position + index));
+          resolve(string.includes(comment));
         })
         .on("error", (error) => {
           reject(error);
@@ -78,12 +74,12 @@ export const development = (entry: string[]) => {
   };
 
   const watch = (
-    firstLine: string,
+    isModule: boolean,
     path: string,
     outfile: string,
     changed: boolean
   ) => {
-    if (firstLine === "// @MODULE") {
+    if (isModule) {
       console.log(`File ${path} is a module, switching to esbuild.`);
       watcher.unwatch(path);
       esbuild
@@ -119,9 +115,9 @@ export const development = (entry: string[]) => {
     .on("add", (path) => {
       const outfile = getminpath(path);
 
-      readfirstline(path)
-        .then((firstLine) => {
-          watch(firstLine, path, outfile, false);
+      hasModuleComment(path)
+        .then((isModule) => {
+          watch(isModule, path, outfile, false);
         })
         .catch((reason) => {
           console.log(reason);
@@ -130,9 +126,9 @@ export const development = (entry: string[]) => {
     .on("change", (path) => {
       const outfile = getminpath(path);
 
-      readfirstline(path)
-        .then((firstLine) => {
-          watch(firstLine, path, outfile, true);
+      hasModuleComment(path)
+        .then((isModule) => {
+          watch(isModule, path, outfile, true);
         })
         .catch((reason) => {
           console.log(reason);

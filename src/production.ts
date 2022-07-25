@@ -92,7 +92,8 @@ export const production = (entries: {
       }
       // If the first line is a comment indicating a module,
       // esbuild is used, otherwise swc is used.
-      if (data.split("\n")[0] === `// @MODULE`) {
+      // !fixme: la comparaison avec data.split() est certainement peu efficace.
+      if (data.split("\n")[0] === `// @MODULE` || data.split("\r")[0] === `// @MODULE`) {
         console.log(`File ${source} is a module, switching to esbuild.`);
         esbuild
           .build({
