@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - releases/*
-    tags:
-      - v2.*
 
 jobs:
   lint:
@@ -23,4 +21,9 @@ jobs:
       - name: install the dependencies
         run: npm ci
       - name: publish to NPM registry
-        run: npm publish
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          touch .npmrc
+          echo //registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN} > .npmrc
+          npm publish
