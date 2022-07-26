@@ -5,10 +5,9 @@ import { production } from "./src/production.js";
 /**
  * @param js The list of Javascript files to be processed, or a glob.
  * @param css The list of CSS files to be processed, or a glob.
- * @param mode The mode to use `'dev'` or `'build'`.
  * @see https://github.com/sindresorhus/globby#globbing-patterns
  */
-const main = (js: string[] | string, css: string[] | string, mode: string) => {
+const main = (js: string[] | string, css: string[] | string) => {
   // If `js` or `css` is a string, we process it with globbySync to return a list of files.
   const jsFiles =
     typeof js === "string"
@@ -18,7 +17,10 @@ const main = (js: string[] | string, css: string[] | string, mode: string) => {
     typeof css === "string"
       ? globbySync(css.split(",").map((str) => str.replace(/ /g, "")))
       : css;
-  const isProduction = mode === "build";
+
+  const args = process.argv;
+  const sourcemap = args.includes("--map");
+  const isProduction = args.includes("--prod");
 
   let notice = "";
   notice =
@@ -39,7 +41,7 @@ const main = (js: string[] | string, css: string[] | string, mode: string) => {
   if (!isProduction) {
     development([...jsFiles, ...cssFiles]);
   } else {
-    production({ jsFiles, cssFiles });
+    production({ jsFiles, cssFiles }, sourcemap);
   }
 };
 

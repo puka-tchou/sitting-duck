@@ -76,10 +76,13 @@ const logResult = (source: string, output: string, numFiles: number) => {
  *
  * @param entries The list of source files.
  */
-export const production = (entries: {
-  jsFiles: string[];
-  cssFiles: string[];
-}) => {
+export const production = (
+  entries: {
+    jsFiles: string[];
+    cssFiles: string[];
+  },
+  sourcemap: boolean
+) => {
   const { jsFiles, cssFiles } = entries;
   const numFiles = [...jsFiles, ...cssFiles].length;
 
@@ -93,7 +96,10 @@ export const production = (entries: {
       // If the first line is a comment indicating a module,
       // esbuild is used, otherwise swc is used.
       // !fixme: la comparaison avec data.split() est certainement peu efficace.
-      if (data.split("\n")[0] === `// @MODULE` || data.split("\r")[0] === `// @MODULE`) {
+      if (
+        data.split("\n")[0] === `// @MODULE` ||
+        data.split("\r")[0] === `// @MODULE`
+      ) {
         console.log(`File ${source} is a module, switching to esbuild.`);
         esbuild
           .build({
@@ -103,7 +109,7 @@ export const production = (entries: {
             format: "iife",
             platform: "browser",
             minify: true,
-            sourcemap: true,
+            sourcemap,
             target,
             treeShaking: true,
             outfile: out,
@@ -129,7 +135,7 @@ export const production = (entries: {
             drop_debugger: true,
           },
           mangle: false,
-          sourceMap: true,
+          sourceMap: sourcemap,
           module: false,
         })
         .then((output) => {

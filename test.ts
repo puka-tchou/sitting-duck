@@ -3,8 +3,6 @@ import { cwd } from "process";
 import minify from "./index.js";
 
 const test = () => {
-  const mode = process.argv[2]?.split("--")[1] ?? "build";
-
   minify(
     [
       path.join(cwd(), "_test/script.js"),
@@ -12,14 +10,12 @@ const test = () => {
       path.join(cwd(), "_test/module-crlf.js"),
       path.join(cwd(), "_test/module.tree-shaking.js"),
     ],
-    [path.join(cwd(), "_test/index.css")],
-    mode
+    [path.join(cwd(), "_test/index.css")]
   );
 
   minify(
     `_test/*.js, !node_modules/, !**/*.min.js`,
-    `_test/*.css, !node_modules/, !**/*.min.css`,
-    mode
+    `_test/*.css, !node_modules/, !**/*.min.css`
   );
 };
 
