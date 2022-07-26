@@ -17,8 +17,8 @@ const test = () => {
   );
 
   minify(
-    `"_test/*.js", "!**/*.min.js"`,
-    `"_test/*.css", "!**/*.min.css"`,
+    `_test/*.js, !node_modules/, !**/*.min.js`,
+    `_test/*.css, !node_modules/, !**/*.min.css`,
     mode
   );
 };
