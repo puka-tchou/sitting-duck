@@ -41,7 +41,7 @@ const main = (js: string[] | string, css: string[] | string) => {
   if (!isProduction) {
     development([...jsFiles, ...cssFiles]);
   } else {
-    production({ jsFiles, cssFiles }, sourcemap);
+    production([...jsFiles, ...cssFiles], sourcemap);
   }
 };
 

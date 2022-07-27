@@ -1,7 +1,7 @@
 import * as swc from "@swc/core";
-import { minify as minifyCss } from "csso";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
+import { getminpath, isCSS, isModule } from "./utils.js";
 
 const target: esbuild.CommonOptions["target"] = [];
 let totSourceSize = 0;
@@ -72,123 +72,131 @@ const logResult = (source: string, output: string, numFiles: number) => {
 };
 
 /**
+ * Bundles and minifies a source file using swc.
+ *
+ * @param source The path to the input file.
+ * @param sourcemap Should sourcemaps be generated?
+ * @param out The path to the out file.
+ * @param numFiles The total number of files.
+ */
+const bundleWithSwc = (
+  source: string,
+  sourcemap: boolean,
+  out: string,
+  numFiles: number
+) => {
+  fs.readFile(source, { encoding: "utf-8" }, (readError, data) => {
+    if (readError) {
+      console.error(readError);
+    }
+
+    swc
+      .minify(data, {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+        mangle: false,
+        sourceMap: sourcemap,
+        module: false,
+      })
+      .then((output) => {
+        fs.writeFile(out, output.code, { encoding: "utf-8" }, (writeError) => {
+          if (writeError) {
+            console.log(`Could not write the file: ${writeError.message}`);
+            return;
+          }
+
+          logResult(source, out, numFiles);
+        });
+        if (output.map) {
+          fs.writeFile(
+            `${out}.map`,
+            output.map,
+            { encoding: "utf-8" },
+            (writeError) => {
+              if (writeError) {
+                console.log(
+                  `Could not write the source map (this is probably fine): ${writeError.message}`
+                );
+              }
+            }
+          );
+        }
+      })
+      .catch((reason) => {
+        console.log(reason);
+        console.log(`swc failed on ${source}`);
+      });
+  });
+};
+
+/**
+ * Bundles and minifies a source file using esbuild.
+ *
+ * @param source The path to the input file.
+ * @param sourcemap Should sourcemaps be generated?
+ * @param out The path to the out file.
+ * @param numFiles The total number of files.
+ */
+const bundleWithEsbuild = (
+  source: string,
+  sourcemap: boolean,
+  out: string,
+  numFiles: number
+) => {
+  console.log(`Using esbuild to bundle ${source}`);
+  esbuild
+    .build({
+      entryPoints: [source],
+      bundle: true,
+      drop: ["console", "debugger"],
+      format: "iife",
+      platform: "browser",
+      minify: true,
+      sourcemap,
+      target,
+      treeShaking: true,
+      outfile: out,
+      legalComments: "linked",
+    })
+    .then((result) => {
+      if (result.errors.length > 0 || result.warnings.length > 0) {
+        console.log(result);
+      }
+      logResult(source, out, numFiles);
+    })
+    .catch(() => {
+      console.log(`esbuild failed on ${source}`);
+    });
+};
+
+/**
  * Minifies and bundles JS and CSS files.
  *
  * @param entries The list of source files.
  */
-export const production = (
-  entries: {
-    jsFiles: string[];
-    cssFiles: string[];
-  },
-  sourcemap: boolean
-) => {
-  const { jsFiles, cssFiles } = entries;
-  const numFiles = [...jsFiles, ...cssFiles].length;
+const production = (entries: string[], sourcemap: boolean) => {
+  const numFiles = entries.length;
 
-  jsFiles.forEach((source) => {
+  entries.forEach((source) => {
     /** The path to the minified file */
-    const out = source.replace(".js", ".min.js");
-    fs.readFile(source, { encoding: "utf-8" }, (readError, data) => {
-      if (readError) {
-        console.error(readError);
-      }
-      // If the first line is a comment indicating a module,
-      // esbuild is used, otherwise swc is used.
-      // !fixme: la comparaison avec data.split() est certainement peu efficace.
-      if (
-        data.split("\n")[0] === `// @MODULE` ||
-        data.split("\r")[0] === `// @MODULE`
-      ) {
-        console.log(`File ${source} is a module, switching to esbuild.`);
-        esbuild
-          .build({
-            entryPoints: [source],
-            bundle: true,
-            drop: ["console", "debugger"],
-            format: "iife",
-            platform: "browser",
-            minify: true,
-            sourcemap,
-            target,
-            treeShaking: true,
-            outfile: out,
-            legalComments: "linked",
-          })
-          .then((result) => {
-            if (result.errors.length > 0 || result.warnings.length > 0) {
-              console.log(result);
-            }
-            logResult(source, out, numFiles);
-          })
-          .catch(() => {
-            console.log(`esbuild failed on ${source}`);
-          });
-
-        return;
-      }
-
-      swc
-        .minify(data, {
-          compress: {
-            drop_console: true,
-            drop_debugger: true,
-          },
-          mangle: false,
-          sourceMap: sourcemap,
-          module: false,
-        })
-        .then((output) => {
-          fs.writeFile(
-            out,
-            output.code,
-            { encoding: "utf-8" },
-            (writeError) => {
-              if (writeError) {
-                console.log(`Could not write the file: ${writeError.message}`);
-                return;
-              }
-
-              logResult(source, out, numFiles);
-            }
-          );
-          if (output.map) {
-            fs.writeFile(
-              `${out}.map`,
-              output.map,
-              { encoding: "utf-8" },
-              (writeError) => {
-                if (writeError) {
-                  console.log(
-                    `Could not write the source map (this is probably fine): ${writeError.message}`
-                  );
-                }
-              }
-            );
-          }
-        })
-        .catch((reason) => {
-          console.log(reason);
-          console.log(`swc failed on ${source}`);
-        });
-    });
-  });
-
-  cssFiles.forEach((sourceFile) => {
-    const out = sourceFile.replace(".css", ".min.css");
-    fs.readFile(sourceFile, { encoding: "utf-8" }, (readError, data) => {
-      if (readError) {
-        console.log(readError);
-      }
-      const css = minifyCss(data).css;
-      fs.writeFile(out, css, { encoding: "utf-8" }, (writeError) => {
-        if (writeError) {
-          console.log(`Could not write the file: ${writeError.message}`);
+    const out = getminpath(source);
+    // If the first line is a comment indicating a module,
+    // esbuild is used, otherwise swc is used.
+    isModule(source)
+      .then((module) => {
+        if (module || isCSS(source)) {
+          bundleWithEsbuild(source, sourcemap, out, numFiles);
           return;
         }
 
-        logResult(sourceFile, out, numFiles);
+        bundleWithSwc(source, sourcemap, out, numFiles);
+      })
+      .catch((reason) => {
+        console.log(reason);
       });
-    });
   });
 };
+
+export { production };
