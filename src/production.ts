@@ -166,6 +166,7 @@ const bundleWithEsbuild = (
         ".webp": "file",
         ".svg": "file",
       },
+      assetNames: "assets/[ext]/[name]-[hash]",
     })
     .then((result) => {
       if (result.errors.length > 0 || result.warnings.length > 0) {
@@ -193,7 +194,8 @@ const production = (entries: string[], sourcemap: boolean) => {
     // esbuild is used, otherwise swc is used.
     isModule(source)
       .then((module) => {
-        if (module || isCSS(source)) {
+        const css = isCSS(source);
+        if (module || css) {
           bundleWithEsbuild(source, sourcemap, out, numFiles);
           return;
         }
