@@ -58,6 +58,10 @@ const build = async (
               ".jpeg": "file",
               ".webp": "file",
               ".svg": "file",
+              ".otf": "file",
+              ".ttf": "file",
+              ".woff": "file",
+              ".woff2": "file",
             },
             assetNames: "assets/[ext]/[name]-[hash]",
             watch: {
