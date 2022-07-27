@@ -19,8 +19,7 @@ import minify from "sitting-duck";
 // You can either pass a string that will be interpreted as a glob pattern by globby or an array of files.
 minify(
   `_test/*.js, !node_modules/, !**/*.min.js`, // These would be your JS files
-  `_test/*.css, !node_modules/, !**/*.min.css`, // Here are your CSS files
-  process.argv[2]?.split("--")[1] ?? "build"
+  `_test/*.css, !node_modules/, !**/*.min.css` // Here are your CSS files
 );
 ```
 
@@ -83,6 +82,14 @@ const testModule = () => {
 
 export { testModule };
 ```
+
+_we also bundle and minify the CSS files using esbuild, allowing you to use this syntax by eg.:_
+
+```css
+@import "./parial.css";
+```
+
+_see the esbuild docs for more info: https://esbuild.github.io/content-types/#css_
 
 ## about this project
 
