@@ -2,4 +2,6 @@
 
 html {
   color: red;
+  background: url("esbuild.svg");
+  background: url("esbuild.png");
 }

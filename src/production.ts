@@ -159,6 +159,13 @@ const bundleWithEsbuild = (
       treeShaking: true,
       outfile: out,
       legalComments: "linked",
+      loader: {
+        ".png": "file",
+        ".jpg": "file",
+        ".jpeg": "file",
+        ".webp": "file",
+        ".svg": "file",
+      },
     })
     .then((result) => {
       if (result.errors.length > 0 || result.warnings.length > 0) {

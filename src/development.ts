@@ -50,6 +50,13 @@ const build = async (
             sourcemap: true,
             target,
             treeShaking: false,
+            loader: {
+              ".png": "file",
+              ".jpg": "file",
+              ".jpeg": "file",
+              ".webp": "file",
+              ".svg": "file",
+            },
             outfile,
             watch: {
               onRebuild(error) {
