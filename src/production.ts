@@ -47,7 +47,7 @@ const logResult = (source: string, output: string, numFiles: number) => {
   // The totals are displayed: weight percentage and difference in MB.
   if (iteration === numFiles) {
     console.log(
-      `Total: ${Intl.NumberFormat(locale, {
+      `Total (${numFiles} files): ${Intl.NumberFormat(locale, {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
