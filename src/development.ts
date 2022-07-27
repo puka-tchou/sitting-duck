@@ -39,7 +39,8 @@ const build = async (
 
   await isModule(path)
     .then((module) => {
-      if (module || isCSS(path)) {
+      const css = isCSS(path);
+      if (module || css) {
         console.log(`Using esbuild to bundle ${path}`);
         watcher.unwatch(path);
         esbuild
@@ -50,6 +51,7 @@ const build = async (
             sourcemap: true,
             target,
             treeShaking: false,
+            outfile,
             loader: {
               ".png": "file",
               ".jpg": "file",
@@ -57,7 +59,7 @@ const build = async (
               ".webp": "file",
               ".svg": "file",
             },
-            outfile,
+            assetNames: "assets/[ext]/[name]-[hash]",
             watch: {
               onRebuild(error) {
                 logRebuild(error, path);
