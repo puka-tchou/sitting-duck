@@ -9,11 +9,11 @@
   "main": "build/index.js",
   "files": [
     "index.ts",
-    "test.ts",
     "tsconfig.json",
     "build/",
-    "_types/"
+    "_types/index.d.ts"
   ],
+  "types": "_types/index.d.ts",
   "scripts": {
     "lint": "eslint \"**/*.ts\"",
     "test:build": "npm run build && node ./build/test.js --prod",
