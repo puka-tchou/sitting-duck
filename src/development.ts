@@ -63,7 +63,7 @@ const build = async (
               ".woff": "file",
               ".woff2": "file",
             },
-            assetNames: "assets/[ext]/[name]-[hash]",
+            assetNames: "assets/[ext]/[name]",
             watch: {
               onRebuild(error) {
                 logRebuild(error, path);

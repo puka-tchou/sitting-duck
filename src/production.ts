@@ -170,7 +170,7 @@ const bundleWithEsbuild = (
         ".woff": "file",
         ".woff2": "file",
       },
-      assetNames: "assets/[ext]/[name]-[hash]",
+      assetNames: "assets/[ext]/[name]",
     })
     .then((result) => {
       if (result.errors.length > 0 || result.warnings.length > 0) {
