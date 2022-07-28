@@ -4,8 +4,6 @@ import * as fs from "fs";
 import { esbuildOptions } from "./options.js";
 import { getminpath, isCSS, isModule } from "./utils.js";
 
-const target: esbuild.CommonOptions["target"] = [];
-
 /**
  * Displays the result of the esbuild transpilation.
  *
