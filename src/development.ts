@@ -1,6 +1,7 @@
 import * as chokidar from "chokidar";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
+import { esbuildOptions } from "./options.js";
 import { getminpath, isCSS, isModule } from "./utils.js";
 
 const target: esbuild.CommonOptions["target"] = [];
@@ -45,25 +46,12 @@ const build = async (
         watcher.unwatch(path);
         esbuild
           .build({
+            ...esbuildOptions,
             entryPoints: [path],
-            bundle: true,
             minify: false,
             sourcemap: true,
-            target,
             treeShaking: false,
             outfile,
-            loader: {
-              ".png": "file",
-              ".jpg": "file",
-              ".jpeg": "file",
-              ".webp": "file",
-              ".svg": "file",
-              ".otf": "file",
-              ".ttf": "file",
-              ".woff": "file",
-              ".woff2": "file",
-            },
-            assetNames: "assets/[ext]/[name]",
             watch: {
               onRebuild(error) {
                 logRebuild(error, path);

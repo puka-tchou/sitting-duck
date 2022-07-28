@@ -1,9 +1,9 @@
 import * as swc from "@swc/core";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
+import { esbuildOptions } from "./options.js";
 import { getminpath, isCSS, isModule } from "./utils.js";
 
-const target: esbuild.CommonOptions["target"] = [];
 let totSourceSize = 0;
 let totOutSize = 0;
 let iteration = 0;
@@ -148,29 +148,13 @@ const bundleWithEsbuild = (
   console.log(`Using esbuild to bundle ${source}`);
   esbuild
     .build({
+      ...esbuildOptions,
       entryPoints: [source],
-      bundle: true,
       drop: ["console", "debugger"],
-      format: "iife",
-      platform: "browser",
       minify: true,
       sourcemap,
-      target,
       treeShaking: true,
       outfile: out,
-      legalComments: "linked",
-      loader: {
-        ".png": "file",
-        ".jpg": "file",
-        ".jpeg": "file",
-        ".webp": "file",
-        ".svg": "file",
-        ".otf": "file",
-        ".ttf": "file",
-        ".woff": "file",
-        ".woff2": "file",
-      },
-      assetNames: "assets/[ext]/[name]",
     })
     .then((result) => {
       if (result.errors.length > 0 || result.warnings.length > 0) {
