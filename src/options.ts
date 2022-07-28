@@ -12,6 +12,7 @@ const esbuildOptions: BuildOptions = {
     ".jpeg": "file",
     ".webp": "file",
     ".svg": "file",
+    ".gif": "file",
     ".otf": "file",
     ".ttf": "file",
     ".woff": "file",
