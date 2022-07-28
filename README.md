@@ -4,7 +4,7 @@
 [![lint](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml/badge.svg)](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml)
 [![Depfu](https://badges.depfu.com/badges/ca84f96e8d849db6e081d875d6c7b3a0/count.svg)](https://depfu.com/github/puka-tchou/sitting-duck?project_id=36118)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/puka-tchou/sitting-duck.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/puka-tchou/sitting-duck/alerts/)
-![Snyk security rating](https://snyk-widget.herokuapp.com/badge/npm/sitting-duck/badge.svg)
+[![Snyk security rating](https://snyk-widget.herokuapp.com/badge/npm/sitting-duck/badge.svg)](https://snyk.io/vuln/npm:sitting-duck)
 
 _A legacy minifier combination that can handle ES6 import/export style and script styles without breaking your codebase._
 
