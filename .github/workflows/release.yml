@@ -1,9 +1,10 @@
 name: release
 
-on:
+on: |
   push:
     branches:
       - releases/*
+  workflow_dispatch
 
 jobs:
   lint:
