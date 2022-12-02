@@ -1,6 +1,6 @@
 {
   "name": "sitting-duck",
-  "version": "2.4.4",
+  "version": "2.4.5",
   "description": "A legacy minifier combination that can handles ES6 import/export style and script styles without breaking your codebase.",
   "repository": {
     "url": "https://github.com/puka-tchou/sitting-duck"
