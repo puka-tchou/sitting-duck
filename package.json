@@ -36,7 +36,7 @@
     "@turf/distance": "^6.5.0",
     "@turf/helpers": "^6.5.0",
     "@turf/turf": "6.5.0",
-    "@types/node": "^18.11.11",
+    "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.45.1",
     "@typescript-eslint/parser": "^5.45.1",
     "eslint": "^8.30.0",
