@@ -29,8 +29,8 @@
   "dependencies": {
     "@swc/core": "1.3.41",
     "chokidar": "3.5.3",
-    "esbuild": "0.17.12",
-    "globby": "13.1.3"
+    "esbuild": "0.17.17",
+    "globby": "13.1.4"
   },
   "devDependencies": {
     "@turf/distance": "^6.5.0",
