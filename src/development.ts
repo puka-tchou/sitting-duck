@@ -51,7 +51,7 @@ const build = async (
             treeShaking: false,
             outfile,
             watch: {
-              onRebuild(error) {
+              onRebuild(error: esbuild.BuildFailure) {
                 logRebuild(error, path);
               },
             },
