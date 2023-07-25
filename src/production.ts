@@ -40,7 +40,7 @@ const logResult = (source: string, output: string, numFiles: number) => {
       maximumFractionDigits: 2,
       style: "percent",
       signDisplay: "exceptZero",
-    }).format((outSize - sourceSize) / sourceSize)})`
+    }).format((outSize - sourceSize) / sourceSize)})`,
   );
 
   // If all files have been processed, the current iteration is the length of the input array.
@@ -60,13 +60,13 @@ const logResult = (source: string, output: string, numFiles: number) => {
         style: "percent",
         signDisplay: "exceptZero",
       }).format(
-        (totOutSize - totSourceSize) / totSourceSize
+        (totOutSize - totSourceSize) / totSourceSize,
       )} / ${Intl.NumberFormat(locale, {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
         signDisplay: "exceptZero",
-      }).format(((totSourceSize - totOutSize) / 1_000_000) * -1)})`
+      }).format(((totSourceSize - totOutSize) / 1_000_000) * -1)})`,
     );
   }
 };
@@ -83,7 +83,7 @@ const bundleWithSwc = (
   source: string,
   sourcemap: boolean,
   out: string,
-  numFiles: number
+  numFiles: number,
 ) => {
   fs.readFile(source, { encoding: "utf-8" }, (readError, data) => {
     if (readError) {
@@ -117,10 +117,10 @@ const bundleWithSwc = (
             (writeError) => {
               if (writeError) {
                 console.log(
-                  `Could not write the source map (this is probably fine): ${writeError.message}`
+                  `Could not write the source map (this is probably fine): ${writeError.message}`,
                 );
               }
-            }
+            },
           );
         }
       })
@@ -143,7 +143,7 @@ const bundleWithEsbuild = (
   source: string,
   sourcemap: boolean,
   out: string,
-  numFiles: number
+  numFiles: number,
 ) => {
   console.log(`Using esbuild to bundle ${source}`);
   esbuild

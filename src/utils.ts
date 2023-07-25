@@ -19,7 +19,7 @@ const isCSS = (path: string) => {
 const getminpath = (path: string) => {
   return extname(path).length > 0
     ? `${path.slice(0, path.length - extname(path).length)}.min${path.slice(
-        -extname(path).length
+        -extname(path).length,
       )}`
     : path;
 };

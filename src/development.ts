@@ -13,11 +13,11 @@ import { getminpath, isCSS, isModule } from "./utils.js";
 const logRebuild = (error: esbuild.BuildFailure | null, path: string) => {
   if (error) {
     console.error(
-      `${new Date().toLocaleTimeString()} Build failed: ${error.message}`
+      `${new Date().toLocaleTimeString()} Build failed: ${error.message}`,
     );
   } else {
     console.log(
-      `${new Date().toLocaleTimeString()} File ${path} has been changed`
+      `${new Date().toLocaleTimeString()} File ${path} has been changed`,
     );
   }
 };
@@ -32,7 +32,7 @@ const logRebuild = (error: esbuild.BuildFailure | null, path: string) => {
 const build = async (
   path: string,
   changed: boolean,
-  watcher: chokidar.FSWatcher
+  watcher: chokidar.FSWatcher,
 ) => {
   const outfile = getminpath(path);
 
@@ -99,11 +99,11 @@ const development = (entry: string[]) => {
           console.log(
             `${new Date().toLocaleTimeString()} Could not remove the file: ${
               error.message
-            }`
+            }`,
           );
         } else {
           console.log(
-            `${new Date().toLocaleTimeString()} File ${outfile} was removed because ${path} was removed.`
+            `${new Date().toLocaleTimeString()} File ${outfile} was removed because ${path} was removed.`,
           );
         }
       });
