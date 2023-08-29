@@ -1,13 +1,14 @@
 # sitting-duck
 
-![npm](https://img.shields.io/npm/v/sitting-duck)
+[![npm](https://img.shields.io/npm/v/sitting-duck)](https://www.npmjs.com/package/sitting-duck)
+[![install size](https://packagephobia.com/badge?p=sitting-duck)](https://packagephobia.com/result?p=sitting-duck)
 [![lint](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml/badge.svg)](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml)
 [![Depfu](https://badges.depfu.com/badges/ca84f96e8d849db6e081d875d6c7b3a0/count.svg)](https://depfu.com/github/puka-tchou/sitting-duck?project_id=36118)
 [![Snyk security rating](https://snyk-widget.herokuapp.com/badge/npm/sitting-duck/badge.svg)](https://snyk.io/vuln/npm:sitting-duck)
 
 _simplify the modernization of your legacy project by combining a minifier capable of handling both ES6 import/export syntax and outdated script-style global-variable based code._
 
-are you managing a legacy project that's in need of gradual modernization? Achieving that goal is commendable, but finding a bundler/minifier that seamlessly handles **antiquated script-style global-variable based code** as well as **contemporary ES6 import/export syntax and `node_modules/` dependencies** can be a daunting task. You shouldn't have to put your project's evolution on hold for weeks just to untangle this mess.
+are you managing a legacy project that's in need of gradual modernization? Achieving that goal is commendable, but finding a bundler/minifier that seamlessly handles **antiquated script-style global-variable based code** as well as **contemporary ES6 import/export syntax and `node_modules/` dependencies** can be daunting. You shouldn't have to put your project's evolution on hold for weeks to untangle this mess.
 
 ## getting started
 
@@ -59,7 +60,7 @@ _optionally, update your .gitignore:_
 
 ## using import/exports with the `// @MODULE` annotation
 
-when importing a module from `node_modules/`, add this line at the very beggining of the file:
+when importing a module from `node_modules/`, add this line at the very beginning of the file:
 
 ```js
 // @MODULE
