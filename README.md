@@ -3,12 +3,11 @@
 ![npm](https://img.shields.io/npm/v/sitting-duck)
 [![lint](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml/badge.svg)](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml)
 [![Depfu](https://badges.depfu.com/badges/ca84f96e8d849db6e081d875d6c7b3a0/count.svg)](https://depfu.com/github/puka-tchou/sitting-duck?project_id=36118)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/puka-tchou/sitting-duck.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/puka-tchou/sitting-duck/alerts/)
 [![Snyk security rating](https://snyk-widget.herokuapp.com/badge/npm/sitting-duck/badge.svg)](https://snyk.io/vuln/npm:sitting-duck)
 
-_A legacy minifier combination that can handle ES6 import/export style and script styles without breaking your codebase._
+_simplify the modernization of your legacy project by combining a minifier capable of handling both ES6 import/export syntax and outdated script-style global-variable based code._
 
-You are working on a legacy project and you would like to progressively modernize it? That's a nice goal but good luck finding a bundler/minifier capable of handling **old-school script-style global-variable based and copy-pasted libraries** as well as **modern ES6 import/export syntax and `node_modules/` dependencies** without forcing you to halt the project evolution for at least a month while you clean this mess.
+are you managing a legacy project that's in need of gradual modernization? Achieving that goal is commendable, but finding a bundler/minifier that seamlessly handles **antiquated script-style global-variable based code** as well as **contemporary ES6 import/export syntax and `node_modules/` dependencies** can be a daunting task. You shouldn't have to put your project's evolution on hold for weeks just to untangle this mess.
 
 ## getting started
 
@@ -24,7 +23,7 @@ minify(
 );
 ```
 
-install the required dependencies:
+install the necessary dependencies:
 
 ```shell-session
 npm i -D sitting-duck
@@ -41,14 +40,14 @@ update your `package.json`:
 }
 ```
 
-run the command:
+execute the commands:
 
 ```shell-session
 npm run build
 npm run dev
 ```
 
-_optionally update your .gitignore:_
+_optionally, update your .gitignore:_
 
 ```text
 *.min.js
@@ -58,9 +57,9 @@ _optionally update your .gitignore:_
 *.LEGAL.txt
 ```
 
-## use import/exports with the `// @MODULE` annotation
+## using import/exports with the `// @MODULE` annotation
 
-If you need to import a module from `node_modules/`, the trick is to add this line at the very beggining of you files:
+when importing a module from `node_modules/`, add this line at the very beggining of the file:
 
 ```js
 // @MODULE
@@ -84,21 +83,21 @@ const testModule = () => {
 export { testModule };
 ```
 
-_we also bundle and minify the CSS files using esbuild, allowing you to use this syntax by eg.:_
+_CSS files are also bundled and minified using esbuild, supporting syntax like:_
 
 ```css
 @import "./parial.css";
 ```
 
-_see the esbuild docs for more info: https://esbuild.github.io/content-types/#css_
+_for more information, consult the esbuild docs:  https://esbuild.github.io/content-types/#css_
 
 ## about this project
 
-The goals of this project are pretty straightforward:
+the objectives of this project are pretty straightforward:
 
-1. minify the legacy files without breaking the code
-2. bundle and minify the modern syntax
-3. silently modernize your codebase
+1. minify legacy files without breaking the code
+2. bundle and minify modern syntax
+3. streamline your codebase's modernization.
 
 To do this, we use a simple concept: **do not f\*cking touch my code**.
 
