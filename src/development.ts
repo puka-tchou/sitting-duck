@@ -5,24 +5,6 @@ import { esbuildOptions } from "./options.js";
 import { getminpath, isCSS, isModule } from "./utils.js";
 
 /**
- * Displays the result of the esbuild transpilation.
- *
- * @param error The esbuild error.
- * @param path The path to the minified file.
- */
-const logRebuild = (error: esbuild.BuildFailure | null, path: string) => {
-  if (error) {
-    console.error(
-      `${new Date().toLocaleTimeString()} Build failed: ${error.message}`,
-    );
-  } else {
-    console.log(
-      `${new Date().toLocaleTimeString()} File ${path} has been changed`,
-    );
-  }
-};
-
-/**
  * Builds the file for development purposes.
  *
  * @param path The path to the file.
@@ -37,25 +19,41 @@ const build = async (
   const outfile = getminpath(path);
 
   await isModule(path)
-    .then((module) => {
+    .then(async (module) => {
       const css = isCSS(path);
       if (module || css) {
         console.log(`Using esbuild to bundle ${path}`);
         watcher.unwatch(path);
-        esbuild
-          .build({
+        (
+          await esbuild.context({
             ...esbuildOptions,
             entryPoints: [path],
             minify: false,
             sourcemap: true,
             treeShaking: false,
             outfile,
-            watch: {
-              onRebuild(error: esbuild.BuildFailure) {
-                logRebuild(error, path);
+            plugins: [
+              {
+                name: "watch",
+                setup(build) {
+                  build.onEnd((result) => {
+                    if (result.errors.length > 0) {
+                      result.errors.forEach((message) => {
+                        console.log(
+                          `Error in file ${message.location?.file}: ${message.text}`,
+                        );
+                        console.log(message.location);
+                      });
+                    } else {
+                      console.log(`File ${path} was successfully built`);
+                    }
+                  });
+                },
               },
-            },
+            ],
           })
+        )
+          .watch()
           .catch((reason) => {
             console.log(`esbuild failed with error: %o`, reason);
           });
