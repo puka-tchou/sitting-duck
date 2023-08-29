@@ -22,3 +22,15 @@ jobs:
         run: npm ci
       - name: lint the code
         run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: install the dependencies
+        run: npm ci
+      - name: runs some basic functionnality tests just to check that the code works
+        run: npm run test:build
