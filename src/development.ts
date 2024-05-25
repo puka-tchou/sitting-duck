@@ -38,12 +38,14 @@ const build = async (
                 setup(build) {
                   build.onEnd((result) => {
                     if (result.errors.length > 0) {
-                      result.errors.forEach((message) => {
+                      const logError = (message: esbuild.Message): void => {
                         console.log(
-                          `Error in file ${message.location?.file}: ${message.text}`,
+                          `Error in file ${message.location?.file}: ${message.text}`
                         );
                         console.log(message.location);
-                      });
+                      };
+
+                      result.errors.forEach(logError);
                     } else {
                       console.log(`File ${path} was successfully built`);
                     }
