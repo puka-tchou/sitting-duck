@@ -30,7 +30,7 @@
     "@swc/core": "1.5.7",
     "chokidar": "3.6.0",
     "esbuild": "0.21.2",
-    "globby": "13.2.2"
+    "globby": "14.0.1"
   },
   "devDependencies": {
     "@turf/distance": "^6.5.0",
