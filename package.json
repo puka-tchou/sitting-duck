@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@turf/distance": "^6.5.0",
-    "@turf/helpers": "^6.5.0",
+    "@turf/helpers": "^7.0.0",
     "@turf/turf": "7.0.0",
     "@types/node": "^20.14.2",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
