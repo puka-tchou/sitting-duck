@@ -40,7 +40,7 @@ const build = async (
                     if (result.errors.length > 0) {
                       const logError = (message: esbuild.Message): void => {
                         console.log(
-                          `Error in file ${message.location?.file}: ${message.text}`
+                          `Error in file ${message.location?.file}: ${message.text}`,
                         );
                         console.log(message.location);
                       };
