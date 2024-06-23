@@ -17,4 +17,12 @@ export default tseslint.config(
     },
     ignores: ["*.min.js", "**/build/", "*.d.ts", "**/_test/"],
   },
+  {
+    files: ["**/*.js"],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: {
+      sourceType: "module",
+      globals: { turf: true, console: true },
+    },
+  }
 );
