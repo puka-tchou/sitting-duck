@@ -16,5 +16,5 @@ export default tseslint.config(
       },
     },
     ignores: ["*.min.js", "**/build/", "*.d.ts", "**/_test/"],
-  }
+  },
 );

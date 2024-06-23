@@ -90,7 +90,7 @@ _CSS files are also bundled and minified using esbuild, supporting syntax like:_
 @import "./parial.css";
 ```
 
-_for more information, consult the esbuild docs:  https://esbuild.github.io/content-types/#css_
+_for more information, consult the esbuild docs: https://esbuild.github.io/content-types/#css_
 
 ## about this project
 
