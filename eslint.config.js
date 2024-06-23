@@ -11,12 +11,10 @@ export default tseslint.config(
   {
     languageOptions: {
       parserOptions: {
-        ecmaVersion: "latest",
+        project: "./tsconfig.json",
         sourceType: "module",
-        tsconfigRootDir: import.meta.dirname,
-        project: ["./tsconfig.json"],
       },
     },
-    ignores: ["*.min.js", "**/build/", "*.d.ts"],
+    ignores: ["*.min.js", "**/build/", "*.d.ts", "**/_test/"],
   }
 );
