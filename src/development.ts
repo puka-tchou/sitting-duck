@@ -40,7 +40,7 @@ const build = async (
                     if (result.errors.length > 0) {
                       const logError = (message: esbuild.Message): void => {
                         console.log(
-                          `Error in file ${message.location?.file}: ${message.text}`,
+                          `Error in file ${message.location?.file ?? "undefined"}: ${message.text}`,
                         );
                         console.log(message.location);
                       };
@@ -56,7 +56,7 @@ const build = async (
           })
         )
           .watch()
-          .catch((reason) => {
+          .catch((reason :unknown) => {
             console.log(`esbuild failed with error: %o`, reason);
           });
       } else {
@@ -68,7 +68,7 @@ const build = async (
         });
       }
     })
-    .catch((reason) => {
+    .catch((reason: unknown) => {
       console.log(reason);
     });
 };
@@ -110,8 +110,8 @@ const development = (entry: string[]) => {
     });
 
   watcher
-    .on("error", (error) => console.log(`Watcher error: ${error.message}`))
-    .on("ready", () => console.log(`Initial scan complete. Ready for changes`));
+    .on("error", (error) => { console.log(`Watcher error: ${error.message}`); })
+    .on("ready", () => { console.log(`Initial scan complete. Ready for changes`); });
 };
 
 export { development };

@@ -47,7 +47,7 @@ const logResult = (source: string, output: string, numFiles: number) => {
   // The totals are displayed: weight percentage and difference in MB.
   if (iteration === numFiles) {
     console.log(
-      `Total (${numFiles} files): ${Intl.NumberFormat(locale, {
+      `Total (${numFiles.toLocaleString()} files): ${Intl.NumberFormat(locale, {
         style: "unit",
         unit: "megabyte",
         unitDisplay: "short",
@@ -124,7 +124,7 @@ const bundleWithSwc = (
           );
         }
       })
-      .catch((reason) => {
+      .catch((reason: unknown) => {
         console.log(reason);
         console.log(`swc failed on ${source}`);
       });
@@ -190,7 +190,7 @@ const production = (entries: string[], sourcemap: boolean) => {
 
         bundleWithSwc(source, sourcemap, out, numFiles);
       })
-      .catch((reason) => {
+      .catch((reason: unknown) => {
         console.log(reason);
       });
   });
