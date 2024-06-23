@@ -56,7 +56,7 @@ const build = async (
           })
         )
           .watch()
-          .catch((reason :unknown) => {
+          .catch((reason: unknown) => {
             console.log(`esbuild failed with error: %o`, reason);
           });
       } else {
@@ -110,8 +110,12 @@ const development = (entry: string[]) => {
     });
 
   watcher
-    .on("error", (error) => { console.log(`Watcher error: ${error.message}`); })
-    .on("ready", () => { console.log(`Initial scan complete. Ready for changes`); });
+    .on("error", (error) => {
+      console.log(`Watcher error: ${error.message}`);
+    })
+    .on("ready", () => {
+      console.log(`Initial scan complete. Ready for changes`);
+    });
 };
 
 export { development };
