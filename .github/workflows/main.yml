@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "22"
       - name: install the dependencies
         run: npm ci
       - name: lint the code
@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "22"
       - name: install the dependencies
         run: npm ci
       - name: runs some basic functionnality tests just to check that the code works
