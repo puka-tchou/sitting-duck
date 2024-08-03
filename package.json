@@ -27,7 +27,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@swc/core": "1.6.13",
+    "@swc/core": "1.7.5",
     "chokidar": "3.6.0",
     "esbuild": "0.23.0",
     "globby": "14.0.2"
