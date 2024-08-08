@@ -39,7 +39,7 @@
     "@turf/turf": "^7.0.0",
     "@types/eslint__js": "^8.42.3",
     "@types/geojson": "^7946.0.14",
-    "@types/node": "^20.14.12",
+    "@types/node": "^22.1.0",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.1.0",
     "typescript": "^5.5.4",
