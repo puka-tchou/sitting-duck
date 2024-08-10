@@ -33,7 +33,7 @@
     "globby": "14.0.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.8.0",
+    "@eslint/js": "^9.9.0",
     "@turf/distance": "^7.1.0",
     "@turf/helpers": "^7.1.0",
     "@turf/turf": "^7.1.0",
