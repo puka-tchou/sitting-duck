@@ -35,7 +35,7 @@
   "devDependencies": {
     "@eslint/js": "^9.8.0",
     "@turf/distance": "^7.0.0",
-    "@turf/helpers": "^7.0.0",
+    "@turf/helpers": "^7.1.0",
     "@turf/turf": "^7.0.0",
     "@types/eslint__js": "^8.42.3",
     "@types/geojson": "^7946.0.14",
