@@ -1,5 +1,3 @@
-import * as path from "path";
-import { cwd } from "process";
 import minify from "./index.js";
 
 const testWithObject = () => {
@@ -34,5 +32,5 @@ const testWithSourceMaps = () => {
 };
 
 testWithObject();
-//testWithGlob();
-//testWithSourceMaps();
+testWithGlob();
+testWithSourceMaps();

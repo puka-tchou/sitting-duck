@@ -1,10 +1,8 @@
-// @ts-check
-
 import eslint from "@eslint/js";
 import prettierConfig from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config(
+const config = tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
   prettierConfig,
@@ -15,7 +13,6 @@ export default tseslint.config(
         sourceType: "module",
       },
     },
-    ignores: ["*.min.js", "**/build/", "*.d.ts", "**/_test/"],
   },
   {
     files: ["**/*.js"],
@@ -26,3 +23,9 @@ export default tseslint.config(
     },
   },
 );
+
+config.push({
+  ignores: ["_test/", "_types/", "build/", "node_modules/", "package-lock.json", "package.json"]
+})
+
+export default config;

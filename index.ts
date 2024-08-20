@@ -2,7 +2,6 @@ import fg from "fast-glob";
 import { development } from "./src/development.js";
 import { production } from "./src/production.js";
 import path from "path";
-import { cwd } from "process";
 
 /**
  * @param js The list of Javascript files to be processed, or a glob.
