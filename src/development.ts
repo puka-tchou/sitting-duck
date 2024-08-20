@@ -1,4 +1,4 @@
-import * as chokidar from "chokidar";
+import Watchpack from "watchpack";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
 import { esbuildOptions } from "./options.js";
@@ -8,22 +8,19 @@ import { getminpath, isCSS, isModule } from "./utils.js";
  * Builds the file for development purposes.
  *
  * @param path The path to the file.
- * @param changed Has the file changed or has it just been added to the watch list?
- * @param watcher The chokidar file watcher instance.
+ *
+ * @returns The message to be displayed in the console.
  */
-const build = async (
-  path: string,
-  changed: boolean,
-  watcher: chokidar.FSWatcher,
-) => {
+const build = async (path: string) => {
   const outfile = getminpath(path);
+  let message = "";
 
   await isModule(path)
     .then(async (module) => {
       const css = isCSS(path);
+      console.log({ module, css });
       if (module || css) {
-        console.log(`Using esbuild to bundle ${path}`);
-        watcher.unwatch(path);
+        message = `Using esbuild to rebuild ${path}`;
         (
           await esbuild.context({
             ...esbuildOptions,
@@ -32,89 +29,76 @@ const build = async (
             sourcemap: true,
             treeShaking: false,
             outfile,
-            plugins: [
-              {
-                name: "watch",
-                setup(build) {
-                  build.onEnd((result) => {
-                    if (result.errors.length > 0) {
-                      const logError = (message: esbuild.Message): void => {
-                        console.log(
-                          `Error in file ${message.location?.file ?? "undefined"}: ${message.text}`,
-                        );
-                        console.log(message.location);
-                      };
-
-                      result.errors.forEach(logError);
-                    } else {
-                      console.log(`File ${path} was successfully built`);
-                    }
-                  });
-                },
-              },
-            ],
           })
         )
-          .watch()
-          .catch((reason: unknown) => {
-            console.log(`esbuild failed with error: %o`, reason);
+          .rebuild()
+          .catch(() => {
+            message = `esbuild couldn't rebuild ${path}`;
           });
       } else {
         fs.copyFile(path, outfile, () => {
-          const message = changed
-            ? `File ${path} has been added`
-            : `File ${path} has been changed`;
-          console.log(`${new Date().toLocaleTimeString()} ${message}`);
+          message = `successfully copied ${path}`;
         });
       }
     })
     .catch((reason: unknown) => {
       console.log(reason);
     });
+
+  return message;
 };
 
 /**
  * Monitors a list of files and writes minified versions whenever the source changes.
  *
- * @param entry The paths to the files to be monitored.
+ * @param files The paths to the files to be monitored.
  */
-const development = (entry: string[]) => {
-  // Initialize watcher.
-  const watcher = chokidar.watch(entry, {
-    persistent: true,
+const development = (files: string[]) => {
+  // Initial build to ensure that files are up to date in case they were changed
+  // without being watched
+  console.log(
+    `Do an initial build to ensure that files are up to date in case they were changed without being watched`
+  );
+  files.forEach((file) => {
+    void build(file).then((message) => {
+      console.log(message);
+    });
   });
 
-  // Add event listeners.
+  // Initialize watcher.
+  const watcher = new Watchpack({
+    aggregateTimeout: 1000,
+    poll: false,
+    followSymlinks: false,
+  });
+
+  // Watch the list of files.
+  watcher.watch({
+    files: files,
+  });
+
+  // Do stuff based on the events ocurring on the original files.
   watcher
-    .on("add", (path) => {
-      void build(path, false, watcher);
-    })
     .on("change", (path) => {
-      void build(path, true, watcher);
+      void build(path).then((message) => {
+        console.log(message);
+      });
     })
-    .on("unlink", (path) => {
+    .on("remove", (path) => {
       const outfile = getminpath(path);
       fs.rm(outfile, (error) => {
         if (error) {
           console.log(
             `${new Date().toLocaleTimeString()} Could not remove the file: ${
               error.message
-            }`,
+            }`
           );
         } else {
           console.log(
-            `${new Date().toLocaleTimeString()} File ${outfile} was removed because ${path} was removed.`,
+            `${new Date().toLocaleTimeString()} File ${outfile} was removed because ${path} was removed.`
           );
         }
       });
-    });
-
-  watcher
-    .on("error", (error) => {
-      console.log(`Watcher error: ${error.message}`);
-    })
-    .on("ready", () => {
-      console.log(`Initial scan complete. Ready for changes`);
     });
 };
 
