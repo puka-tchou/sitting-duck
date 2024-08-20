@@ -1,6 +1,7 @@
 # sitting-duck
 
 [![npm](https://img.shields.io/npm/v/sitting-duck)](https://www.npmjs.com/package/sitting-duck)
+[![bundle size](https://badgen.net/bundlephobia/min/sitting-duck)](https://bundlephobia.com/package/sitting-duck)
 [![install size](https://packagephobia.com/badge?p=sitting-duck)](https://packagephobia.com/result?p=sitting-duck)
 [![lint](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml/badge.svg)](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml)
 [![Depfu](https://badges.depfu.com/badges/ca84f96e8d849db6e081d875d6c7b3a0/count.svg)](https://depfu.com/github/puka-tchou/sitting-duck?project_id=36118)
@@ -8,65 +9,65 @@
 
 _simplify the modernization of your legacy project by combining a minifier capable of handling both ES6 import/export syntax and outdated script-style global-variable based code._
 
-are you managing a legacy project that's in need of gradual modernization? Achieving that goal is commendable, but finding a bundler/minifier that seamlessly handles **antiquated script-style global-variable based code** as well as **contemporary ES6 import/export syntax and `node_modules/` dependencies** can be daunting. You shouldn't have to put your project's evolution on hold for weeks to untangle this mess.
+Are you managing a legacy project that needs gradual modernization? Finding a bundler/minifier that handles **antiquated script-style global-variable based code** as well as **contemporary ES6 import/export syntax and `node_modules/` dependencies** can be challenging. With sitting-duck, you don't have to pause your project's evolution to address these issues.
 
-## getting started
+## Getting Started
 
-create a file named `minify.mjs`:
+1. **Create a file named `minify.mjs`:**
 
-```js
-import minify from "sitting-duck";
+   ```js
+   import minify from "sitting-duck";
 
-// You can either pass a string that will be interpreted as a glob pattern by globby or an array of files.
-minify(
-  `_test/*.js, !node_modules/, !**/*.min.js`, // These would be your JS files
-  `_test/*.css, !node_modules/, !**/*.min.css`, // Here are your CSS files
-);
-```
+   // You can either pass a string that will be interpreted as a glob pattern by globby or an array of files.
+   minify(
+     `_test/*.js, !node_modules/, !**/*.min.js`, // Your JS files
+     `_test/*.css, !node_modules/, !**/*.min.css` // Your CSS files
+   );
+   ```
 
-install the necessary dependencies:
+2. **Install the necessary dependencies:**
 
-```shell-session
-npm i -D sitting-duck
-```
+   ```shell-session
+   npm i -D sitting-duck
+   ```
 
-update your `package.json`:
+3. **Update your `package.json`:**
 
-```json
-{
-  "scripts": {
-    "dev": "node ./minify.mjs --dev",
-    "build": "node ./minify.mjs"
-  }
-}
-```
+   ```json
+   {
+     "scripts": {
+       "dev": "node ./minify.mjs --dev",
+       "build": "node ./minify.mjs"
+     }
+   }
+   ```
 
-execute the commands:
+4. **Execute the commands:**
 
-```shell-session
-npm run build
-npm run dev
-```
+   ```shell-session
+   npm run build
+   npm run dev
+   ```
 
-_optionally, update your .gitignore:_
+5. **Optionally, update your `.gitignore`:**
 
-```text
-*.min.js
-*.min.js.map
-*.min.css
-*.min.css.map
-*.LEGAL.txt
-```
+   ```text
+   *.min.js
+   *.min.js.map
+   *.min.css
+   *.min.css.map
+   *.LEGAL.txt
+   ```
 
-## using import/exports with the `// @MODULE` annotation
+## Using Import/Exports with the `// @MODULE` Annotation
 
-when importing a module from `node_modules/`, add this line at the very beginning of the file:
+When importing a module from `node_modules/`, add the following line at the very beginning of the file:
 
 ```js
 // @MODULE
 ```
 
-_see the [\_test/module.js](_test/module.js) file for an example:_
+_See the [\_test/module.js](_test/module.js) file for an example:_
 
 ```js
 // @MODULE
@@ -87,26 +88,24 @@ export { testModule };
 _CSS files are also bundled and minified using esbuild, supporting syntax like:_
 
 ```css
-@import "./parial.css";
+@import "./partial.css";
 ```
 
-_for more information, consult the esbuild docs: https://esbuild.github.io/content-types/#css_
+_For more information, consult the esbuild docs: [esbuild CSS Content Types](https://esbuild.github.io/content-types/#css)_
 
-## about this project
+## About This Project
 
-the objectives of this project are pretty straightforward:
+The goals of this project are simple:
 
-1. minify legacy files without breaking the code
-2. bundle and minify modern syntax
-3. streamline your codebase's modernization.
+1. Minify legacy files without breaking the code.
+2. Bundle and minify modern syntax.
+3. Streamline your codebase's modernization.
 
-To do this, we use a simple concept: **do not f\*cking touch my code**.
+We adhere to the principle of **"do not f\*cking touch my code"**. We understand that sometimes things just work, and we respect that. This project won't impose arbitrary coding styles, conventions, or syntax changes. When dealing with large codebases, you don’t want unexpected transformations breaking your app.
 
-Sometimes, things just work. I understand and respect that and this project won't force you to use an arbitrary coding style, convention or syntax. _When you're working on 10 000+ lines long files, you do not want your bundler to transform your code and unexpectedly break your app._
+To achieve this, we use:
 
-As a result of this philosophy, we use a combination of tools:
+1. [SWC](https://github.com/swc-project/swc) to minify legacy files. SWC is known for its speed.
+2. [esbuild](https://github.com/evanw/esbuild) to bundle dependencies and transform modern syntax to `iife`. esbuild is also fast.
 
-1. [swc](https://github.com/swc-project/swc) to minify the legacy files. swc is fast, very fast.
-2. [esbuild](https://github.com/evanw/esbuild) to bundle the dependencies and transform the modern syntax to `iife`. esbuild is fast as well.
-
-the files generated are saved at the side of the original ones and can be used in place of the originals.
+The generated files are saved alongside the original ones and can be used in place of the originals.
