@@ -16,6 +16,7 @@
   "types": "_types/index.d.ts",
   "scripts": {
     "lint": "eslint",
+    "format": "prettier --write .",
     "test:build": "npm run build && node ./build/test.js --prod",
     "test:dev": "npm run build && node ./build/test.js --dev",
     "ci-install": "GIT_SSH_COMMAND=ssh npm ci",
@@ -44,6 +45,7 @@
     "@types/watchpack": "^2.4.4",
     "eslint": "^9.9.0",
     "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.0-alpha.30"
   }

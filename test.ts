@@ -2,16 +2,30 @@ import * as path from "path";
 import { cwd } from "process";
 import minify from "./index.js";
 
-const test = () => {
+const testWithObject = () => {
+  console.log("\nTesting with an object to define files.");
   minify(
     [
-      path.join(cwd(), "_test/script.js"),
-      path.join(cwd(), "_test/module.js"),
-      path.join(cwd(), "_test/module-crlf.js"),
-      path.join(cwd(), "_test/module.tree-shaking.js"),
+      "_test/script.js",
+      "_test/module.js",
+      "_test/module-crlf.js",
+      "_test/module.tree-shaking.js",
     ],
-    [path.join(cwd(), "_test/index.css")],
+    ["_test/index.css"],
   );
+};
+
+const testWithGlob = () => {
+  console.log("\nTesting with an object to define files.");
+  minify(
+    `_test/*.js, !node_modules/, !**/*.min.js`,
+    `_test/*.css, !node_modules/, !**/*.min.css`,
+  );
+};
+
+const testWithSourceMaps = () => {
+  console.log("\nTesting with sourcemap generation.");
+  process.argv.push("--map");
 
   minify(
     `_test/*.js, !node_modules/, !**/*.min.js`,
@@ -19,4 +33,6 @@ const test = () => {
   );
 };
 
-test();
+testWithObject();
+//testWithGlob();
+//testWithSourceMaps();

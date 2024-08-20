@@ -1,6 +1,8 @@
 import fg from "fast-glob";
 import { development } from "./src/development.js";
 import { production } from "./src/production.js";
+import path from "path";
+import { cwd } from "process";
 
 /**
  * @param js The list of Javascript files to be processed, or a glob.
@@ -9,14 +11,27 @@ import { production } from "./src/production.js";
  */
 const main = (js: string[] | string, css: string[] | string) => {
   // If `js` or `css` is a string, we process it with `fg.sync()` to return a list of files.
-  const jsFiles =
-    typeof js === "string"
-      ? fg.globSync(js.split(",").map((str) => str.replace(/ /g, "")))
-      : js;
-  const cssFiles =
-    typeof css === "string"
-      ? fg.globSync(css.split(",").map((str) => str.replace(/ /g, "")))
-      : css;
+  let jsFiles: string[] = [];
+  if (typeof js === "string") {
+    jsFiles = fg
+      .globSync(js.split(",").map((str) => str.replace(/ /g, "")))
+      .map((relativePath) => path.normalize(relativePath));
+  } else {
+    for (const relativePath of js) {
+      jsFiles.push(path.normalize(relativePath));
+    }
+  }
+
+  let cssFiles: string[] = [];
+  if (typeof css === "string") {
+    cssFiles = fg
+      .globSync(css.split(",").map((str) => str.replace(/ /g, "")))
+      .map((relativePath) => path.normalize(relativePath));
+  } else {
+    for (const relativePath of css) {
+      cssFiles.push(path.normalize(relativePath));
+    }
+  }
 
   const args = process.argv;
   const sourcemap = args.includes("--map");

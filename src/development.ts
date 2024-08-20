@@ -57,7 +57,7 @@ const development = (files: string[]) => {
   // Initial build to ensure that files are up to date in case they were changed
   // without being watched
   console.log(
-    `Do an initial build to ensure that files are up to date in case they were changed without being watched`
+    `Do an initial build to ensure that files are up to date in case they were changed without being watched`,
   );
   files.forEach((file) => {
     void build(file).then((message) => {
@@ -91,11 +91,11 @@ const development = (files: string[]) => {
           console.log(
             `${new Date().toLocaleTimeString()} Could not remove the file: ${
               error.message
-            }`
+            }`,
           );
         } else {
           console.log(
-            `${new Date().toLocaleTimeString()} File ${outfile} was removed because ${path} was removed.`
+            `${new Date().toLocaleTimeString()} File ${outfile} was removed because ${path} was removed.`,
           );
         }
       });

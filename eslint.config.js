@@ -24,5 +24,5 @@ export default tseslint.config(
       sourceType: "module",
       globals: { turf: true, console: true },
     },
-  }
+  },
 );

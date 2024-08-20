@@ -49,13 +49,15 @@ const logResult = (source: string, output: string, numFiles: number) => {
     console.log(
       `Total (${numFiles.toLocaleString()} files): ${Intl.NumberFormat(locale, {
         style: "unit",
-        unit: "megabyte",
+        unit: "kilobyte",
         unitDisplay: "short",
-      }).format(totSourceSize / 1_000_000)} > ${Intl.NumberFormat(locale, {
+        maximumFractionDigits: 2,
+      }).format(totSourceSize / 1_000)} > ${Intl.NumberFormat(locale, {
         style: "unit",
-        unit: "megabyte",
+        unit: "kilobyte",
         unitDisplay: "short",
-      }).format(totOutSize / 1_000_000)} (${Intl.NumberFormat(locale, {
+        maximumFractionDigits: 2,
+      }).format(totOutSize / 1_000)} (${Intl.NumberFormat(locale, {
         maximumFractionDigits: 2,
         style: "percent",
         signDisplay: "exceptZero",
@@ -63,10 +65,11 @@ const logResult = (source: string, output: string, numFiles: number) => {
         (totOutSize - totSourceSize) / totSourceSize,
       )} / ${Intl.NumberFormat(locale, {
         style: "unit",
-        unit: "megabyte",
+        unit: "kilobyte",
         unitDisplay: "short",
         signDisplay: "exceptZero",
-      }).format(((totSourceSize - totOutSize) / 1_000_000) * -1)})`,
+        maximumFractionDigits: 2,
+      }).format(((totSourceSize - totOutSize) / 1_000) * -1)})`,
     );
   }
 };
@@ -89,7 +92,7 @@ const bundleWithSwc = (
     if (readError) {
       console.error(readError);
     }
-
+    console.log(`Using swc to bundle ${source}`);
     swc
       .minify(data, {
         compress: {
@@ -124,9 +127,9 @@ const bundleWithSwc = (
           );
         }
       })
-      .catch((reason: unknown) => {
-        console.log(reason);
+      .catch((error: unknown) => {
         console.log(`swc failed on ${source}`);
+        console.log(error);
       });
   });
 };
@@ -162,8 +165,9 @@ const bundleWithEsbuild = (
       }
       logResult(source, out, numFiles);
     })
-    .catch(() => {
+    .catch((error: unknown) => {
       console.log(`esbuild failed on ${source}`);
+      console.log(error);
     });
 };
 
