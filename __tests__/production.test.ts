@@ -28,7 +28,7 @@ describe("production.ts", () => {
         1,
       );
       setTimeout(() => {
-        expect(fs.existsSync(path.join("fixtures", "module.min.js"))).toBe(
+        expect(fs.existsSync(path.join("./fixtures", "module.min.js"))).toBe(
           true,
         );
         done();
@@ -39,8 +39,8 @@ describe("production.ts", () => {
   describe("production", () => {
     it("should bundle and minify JavaScript and CSS files", () => {
       production(["./fixtures/module.js", "./fixtures/example.css"], false);
-      expect(fs.existsSync(path.join("fixtures", "module.min.js"))).toBe(true);
-      expect(fs.existsSync(path.join("fixtures", "example.min.css"))).toBe(
+      expect(fs.existsSync(path.join("./fixtures", "module.min.js"))).toBe(true);
+      expect(fs.existsSync(path.join("./fixtures", "example.min.css"))).toBe(
         true,
       );
     });
