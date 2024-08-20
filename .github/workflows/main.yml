@@ -32,5 +32,5 @@ jobs:
           node-version: "22"
       - name: install the dependencies
         run: npm ci
-      - name: runs some basic functionnality tests just to check that the code works
-        run: npm run test:build
+      - name: runs unit testing with jest
+        run: npm run test

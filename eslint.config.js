@@ -25,19 +25,16 @@ const config = tseslint.config(
 );
 
 config.push({
-  plugins: ["jest"],
   ignores: [
     "__tests__/",
     "_test/",
     "_types/",
     "build/",
     "node_modules/",
+    "babel.config.cjs",
     "package-lock.json",
     "package.json",
   ],
-  env: {
-    "jest/globals": true,
-  },
 });
 
 export default config;
