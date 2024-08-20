@@ -1,8 +1,8 @@
 import Watchpack from "watchpack";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
-import { esbuildOptions } from "./options.js";
-import { getminpath, isCSS, isModule } from "./utils.js";
+import { getminpath, isCSS, isModule } from "./utils";
+import { esbuildOptions } from "./options";
 
 /**
  * Builds the file for development purposes.
@@ -102,4 +102,4 @@ const development = (files: string[]) => {
     });
 };
 
-export { development };
+export { development, build };
