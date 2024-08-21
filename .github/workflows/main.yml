@@ -34,3 +34,7 @@ jobs:
         run: npm ci
       - name: runs unit testing with jest
         run: npm run test
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

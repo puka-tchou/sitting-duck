@@ -32,6 +32,7 @@ config.push({
     "build/",
     "node_modules/",
     "babel.config.cjs",
+    "jest.config.cjs",
     "package-lock.json",
     "package.json",
   ],

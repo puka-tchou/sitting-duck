@@ -2,6 +2,7 @@ node_modules/
 build/
 _types/
 _test/assets/
+coverage/
 *.min.js
 *.min.js.map
 *.min.css
