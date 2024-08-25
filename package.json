@@ -28,7 +28,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@swc/core": "1.7.14",
+    "@swc/core": "1.7.18",
     "chokidar": "3.6.0",
     "esbuild": "0.23.1",
     "fast-glob": "3.3.2",
