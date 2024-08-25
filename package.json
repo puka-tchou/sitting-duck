@@ -35,7 +35,7 @@
     "watchpack": "2.4.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.0",
+    "@eslint/js": "^9.9.1",
     "@turf/distance": "^7.1.0",
     "@turf/helpers": "^7.1.0",
     "@turf/turf": "^7.1.0",
