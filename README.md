@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/v/sitting-duck)](https://www.npmjs.com/package/sitting-duck)
 [![bundle size](https://badgen.net/bundlephobia/min/sitting-duck)](https://bundlephobia.com/package/sitting-duck)
 [![install size](https://packagephobia.com/badge?p=sitting-duck)](https://packagephobia.com/result?p=sitting-duck)
+[![codecov](https://codecov.io/github/puka-tchou/sitting-duck/graph/badge.svg?token=YM8DLOZSQ9)](https://codecov.io/github/puka-tchou/sitting-duck)
 [![lint](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml/badge.svg)](https://github.com/puka-tchou/sitting-duck/actions/workflows/main.yml)
 [![Depfu](https://badges.depfu.com/badges/ca84f96e8d849db6e081d875d6c7b3a0/count.svg)](https://depfu.com/github/puka-tchou/sitting-duck?project_id=36118)
 [![Snyk security rating](https://snyk-widget.herokuapp.com/badge/npm/sitting-duck/badge.svg)](https://snyk.io/vuln/npm:sitting-duck)
