@@ -41,6 +41,8 @@ const isModule = async (path: string) => {
         if (typeof chunk === "string") {
           string = chunk;
           stream.close();
+        } else {
+          reject(new Error("Data was not of type string"));
         }
       })
       .on("close", () => {
