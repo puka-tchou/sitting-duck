@@ -1,3 +1,4 @@
+import { describe, expect, test } from "@jest/globals";
 import { esbuildOptions } from "../src/options";
 
 describe("esbuildOptions Configuration", () => {

@@ -1,7 +1,5 @@
+import { describe, expect, jest, test } from "@jest/globals";
 import { isCSS, getminpath, isModule } from "../src/utils";
-import * as fs from "fs";
-
-jest.mock("fs");
 
 describe("Utils Tests", () => {
   test("isCSS should return true for .css files", () => {
@@ -16,36 +14,16 @@ describe("Utils Tests", () => {
   });
 
   test("isModule should resolve true if file contains @MODULE comment", async () => {
-    const mockStream = {
-      on: jest.fn().mockImplementation(function (event, callback) {
-        if (event === "data") callback("// @MODULE");
-        if (event === "close") callback();
-        return this;
-      }),
-      close: jest.fn(),
-    };
-    fs.createReadStream.mockReturnValue(mockStream);
-
-    const result = await isModule("testfile.js");
+    const result = await isModule("./fixtures/module.js");
     expect(result).toBe(true);
   });
 
   test("isModule should resolve false if file does not contain @MODULE comment", async () => {
-    const mockStream = {
-      on: jest.fn().mockImplementation(function (event, callback) {
-        if (event === "data") callback('console.log("Hello World");');
-        if (event === "close") callback();
-        return this;
-      }),
-      close: jest.fn(),
-    };
-    fs.createReadStream.mockReturnValue(mockStream);
-
-    const result = await isModule("testfile.js");
+    const result = await isModule("./fixtures/non-module.js");
     expect(result).toBe(false);
   });
 
   test("isModule should reject the promise if it fails to read the file", async () => {
-    await expect(isModule("testfile.js")).rejects;
+    await expect(isModule("not-a-real-file.js")).rejects;
   });
 });
