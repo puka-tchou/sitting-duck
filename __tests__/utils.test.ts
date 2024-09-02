@@ -44,4 +44,8 @@ describe("Utils Tests", () => {
     const result = await isModule("testfile.js");
     expect(result).toBe(false);
   });
+
+  test("isModule should reject the promise if it fails to read the file", async () => {
+    await expect(isModule("testfile.js")).rejects;
+  });
 });
