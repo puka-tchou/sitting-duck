@@ -15,7 +15,7 @@
   ],
   "types": "_types/index.d.ts",
   "scripts": {
-    "lint": "eslint",
+    "lint": "eslint --fix",
     "format": "prettier --write .",
     "test": "jest",
     "test:build": "npm run build && node ./build/test.js --prod",
