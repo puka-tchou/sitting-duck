@@ -18,8 +18,8 @@
     "lint": "eslint --fix",
     "format": "prettier --write .",
     "test": "jest",
-    "test:build": "npm run build && node ./build/test.js --prod",
-    "test:dev": "npm run build && node ./build/test.js --dev",
+    "test:build": "npm run build && node ./build/manual.js --prod",
+    "test:dev": "npm run build && node ./build/manual.js --dev",
     "ci-install": "GIT_SSH_COMMAND=ssh npm ci",
     "build": "tsc",
     "prepublishOnly": "tsc"
