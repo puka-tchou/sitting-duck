@@ -1,8 +1,8 @@
 import Watchpack from "watchpack";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
-import { getminpath, isCSS, isModule } from "./utils";
-import { esbuildOptions } from "./options";
+import { getminpath, isCSS, isModule } from "./utils.js";
+import { esbuildOptions } from "./options.js";
 
 /**
  * Builds the file for development purposes.

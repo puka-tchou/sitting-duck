@@ -1,8 +1,8 @@
 import * as swc from "@swc/core";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
-import { esbuildOptions } from "./options";
-import { getminpath, isCSS, isModule } from "./utils";
+import { esbuildOptions } from "./options.js";
+import { getminpath, isCSS, isModule } from "./utils.js";
 
 let totSourceSize = 0;
 let totOutSize = 0;
