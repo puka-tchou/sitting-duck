@@ -1,6 +1,8 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { isCSS, getminpath, isModule } from "../src/utils";
 import path from "path";
+import * as fs from "fs";
+import { Readable } from "stream";
 
 describe("Utils Tests", () => {
   describe("isCSS", () => {
@@ -69,9 +71,26 @@ describe("Utils Tests", () => {
       expect(result).toBe(false);
     });
 
-    // You can add a test for a non-existing file to ensure error handling
-    test("should reject the promise if it fails to read the file", async () => {
-      await expect(isModule("not-a-real-file.js")).rejects.toThrow();
+    test("should reject if data from file is not of type string", async () => {
+      const mockReadStream = new Readable({
+        read() {
+          this.push(Buffer.from([0x01, 0x02])); // Emit a buffer (non-string)
+          this.push(null); // End the stream
+        },
+      });
+
+      const mockFs = {
+        ...fs,
+        createReadStream: jest.fn().mockReturnValue(mockReadStream),
+      };
+
+      await expect(isModule("path/to/file", mockFs)).rejects.toThrow(
+        "Data was not of type string",
+      );
+
+      expect(mockFs.createReadStream).toHaveBeenCalledWith("path/to/file", {
+        encoding: "utf8",
+      });
     });
   });
 });

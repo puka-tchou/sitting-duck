@@ -28,11 +28,15 @@ const getminpath = (path: string) => {
  * Reads the first line of a file.
  *
  * @param path Path to the file to be read.
+ * @param fsModule Optional file system module (for dependency injection in tests)
  * @returns A promise that is resolved at the first line of the file.
  */
-const isModule = async (path: string) => {
+const isModule = async (
+  path: string,
+  fsModule: typeof fs = fs,
+): Promise<boolean> => {
   return new Promise<boolean>((resolve, reject) => {
-    const stream = fs.createReadStream(path, { encoding: "utf8" });
+    const stream = fsModule.createReadStream(path, { encoding: "utf8" });
     const comment = `// @MODULE`;
     let string = "";
 
