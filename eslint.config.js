@@ -29,6 +29,7 @@ config.push({
     "__tests__/",
     "_test/",
     "_types/",
+    "fixtures/",
     "build/",
     "node_modules/",
     "babel.config.cjs",
