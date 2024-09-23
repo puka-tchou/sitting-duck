@@ -30,7 +30,7 @@
   "type": "module",
   "dependencies": {
     "@swc/core": "1.7.26",
-    "esbuild": "0.23.1",
+    "esbuild": "0.24.0",
     "fast-glob": "3.3.2",
     "watchpack": "2.4.2"
   },
