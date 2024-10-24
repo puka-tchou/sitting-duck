@@ -35,9 +35,9 @@
     "watchpack": "2.4.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.8",
-    "@babel/preset-env": "^7.25.8",
-    "@babel/preset-typescript": "^7.25.7",
+    "@babel/core": "^7.25.9",
+    "@babel/preset-env": "^7.25.9",
+    "@babel/preset-typescript": "^7.25.9",
     "@eslint/js": "^9.13.0",
     "@jest/globals": "^29.7.0",
     "@turf/distance": "^7.1.0",
