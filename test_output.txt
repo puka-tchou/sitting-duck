@@ -1,0 +1,5 @@
+
+> sitting-duck@2.6.1 test
+> jest --coverage
+
+sh: 1: jest: not found
