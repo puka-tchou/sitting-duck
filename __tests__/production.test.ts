@@ -77,9 +77,14 @@ describe("Production Mode Tests", () => {
         cb(readError);
       });
 
+      // Suppress console.error for this error handling test
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
       bundleWithSwc(source, false, out, 1);
 
       expect(fs.readFile).toHaveBeenCalled();
+      
+      consoleErrorSpy.mockRestore();
     });
 
     test("should write sourcemap if output is provided", (done) => {
