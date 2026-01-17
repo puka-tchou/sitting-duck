@@ -7,9 +7,11 @@
     "module": "ES6",
     "moduleResolution": "node",
     "outDir": "build/",
+    "skipLibCheck": true,
     "strict": true,
-    "target": "ES6"
+    "target": "ES6",
+    "types": ["node"]
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules", "__tests__", "**/*.d.ts"]
+  "include": ["src/**/*.ts", "index.ts", "manual.ts"],
+  "exclude": ["node_modules", "__tests__", "**/*.d.ts", "**/*.config.*", "**/build/**"]
 }
