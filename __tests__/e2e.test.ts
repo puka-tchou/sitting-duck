@@ -81,15 +81,11 @@ describe("End-to-End Tests", () => {
       const modulePath = path.join(process.cwd(), "fixtures", "module.js");
       const nonModulePath = path.join(process.cwd(), "fixtures", "non-module.js");
 
-      if (fs.existsSync(modulePath)) {
-        const isModuleResult = await isModule(modulePath);
-        expect(isModuleResult).toBe(true);
-      }
+      const isModuleResult = await isModule(modulePath);
+      expect(isModuleResult).toBe(true);
 
-      if (fs.existsSync(nonModulePath)) {
-        const isNonModuleResult = await isModule(nonModulePath);
-        expect(isNonModuleResult).toBe(false);
-      }
+      const isNonModuleResult = await isModule(nonModulePath);
+      expect(isNonModuleResult).toBe(false);
     });
   });
 
@@ -299,29 +295,23 @@ console.log(x);
       const { isModule, isCSS, getminpath } = await import("../src/utils");
       const fixturePath = path.join(process.cwd(), "fixtures");
 
-      if (fs.existsSync(fixturePath)) {
-        const files = fs.readdirSync(fixturePath);
+      const files = fs.readdirSync(fixturePath);
 
-        for (const file of files) {
-          const fullPath = path.join(fixturePath, file);
-          const stat = fs.statSync(fullPath);
+      for (const file of files) {
+        const fullPath = path.join(fixturePath, file);
+        const stat = fs.statSync(fullPath);
 
-          if (stat.isFile()) {
-            const isCss = isCSS(file);
-            const minPath = getminpath(file);
+        if (stat.isFile()) {
+          const isCss = isCSS(file);
+          const minPath = getminpath(file);
 
-            expect(typeof isCss).toBe("boolean");
-            expect(typeof minPath).toBe("string");
+          expect(typeof isCss).toBe("boolean");
+          expect(typeof minPath).toBe("string");
 
-            // If it's a JS file, check if it's a module
-            if (file.endsWith(".js")) {
-              try {
-                const isModuleResult = await isModule(fullPath);
-                expect(typeof isModuleResult).toBe("boolean");
-              } catch (error) {
-                // File might not be readable, that's ok
-              }
-            }
+          // If it's a JS file, check if it's a module
+          if (file.endsWith(".js")) {
+            const isModuleResult = await isModule(fullPath);
+            expect(typeof isModuleResult).toBe("boolean");
           }
         }
       }

@@ -237,7 +237,7 @@ describe("Production Mode Tests", () => {
       expect(utils.isModule).toHaveBeenCalledWith(files[0]);
     });
 
-    test("should process CSS files with esbuild", (done) => {
+    test("should process CSS files with esbuild", async () => {
       const files = ["_test/styles.css"];
       (utils.isModule as jest.Mock).mockResolvedValue(false as any);
       (utils.isCSS as jest.Mock).mockReturnValue(true);
@@ -253,11 +253,10 @@ describe("Production Mode Tests", () => {
 
       production(files, false);
 
-      // Give time for the async isModule to resolve and bundleWithEsbuild to be called
-      setTimeout(() => {
-        expect(esbuild.build).toHaveBeenCalled();
-        done();
-      }, 10);
+      // Flush pending promises created by isModule().then(...)
+      await Promise.resolve();
+
+      expect(esbuild.build).toHaveBeenCalled();
     });
 
     test("should process non-module files with swc", () => {
@@ -330,7 +329,7 @@ describe("Production Mode Tests", () => {
       expect(utils.isModule).toHaveBeenCalledTimes(3);
     });
 
-    test("should pass sourcemap option correctly", (done) => {
+    test("should pass sourcemap option correctly", async () => {
       const files = ["_test/module.js"];
       (utils.isModule as jest.Mock).mockResolvedValue(true as any);
       (utils.isCSS as jest.Mock).mockReturnValue(false);
@@ -346,12 +345,11 @@ describe("Production Mode Tests", () => {
 
       production(files, true);
 
-      // Give time for the async isModule to resolve
-      setTimeout(() => {
-        const buildCall = (esbuild.build as jest.Mock).mock.calls[0][0];
-        expect(buildCall.sourcemap).toBe(true);
-        done();
-      }, 10);
+      // Flush pending promises created by isModule().then(...)
+      await Promise.resolve();
+
+      const buildCall = (esbuild.build as jest.Mock).mock.calls[0][0];
+      expect(buildCall.sourcemap).toBe(true);
     });
   });
 });

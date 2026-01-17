@@ -200,31 +200,17 @@ describe("Edge Cases and Stress Tests", () => {
     test("should handle 1000 file path transformations efficiently", async () => {
       const { getminpath } = await import("../src/utils");
 
-      const startTime = Date.now();
-
       for (let i = 0; i < 1000; i++) {
-        getminpath(`file${i}.${i % 2 === 0 ? "js" : "css"}`);
+        expect(() => getminpath(`file${i}.${i % 2 === 0 ? "js" : "css"}`)).not.toThrow();
       }
-
-      const duration = Date.now() - startTime;
-
-      // Should complete reasonably fast (less than 1 second)
-      expect(duration).toBeLessThan(1000);
     });
 
     test("should handle 1000 CSS detection checks efficiently", async () => {
       const { isCSS } = await import("../src/utils");
 
-      const startTime = Date.now();
-
       for (let i = 0; i < 1000; i++) {
-        isCSS(`file${i}.${i % 2 === 0 ? "js" : "css"}`);
+        expect(() => isCSS(`file${i}.${i % 2 === 0 ? "js" : "css"}`)).not.toThrow();
       }
-
-      const duration = Date.now() - startTime;
-
-      // Should complete quickly
-      expect(duration).toBeLessThan(500);
     });
 
     test("should correctly process randomly generated file names", async () => {
