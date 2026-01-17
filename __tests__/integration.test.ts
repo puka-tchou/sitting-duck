@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, test } from "@jest/globals";
-import * as path from "path";
+import * as path from "node:path";
 
 // Integration tests test how multiple modules work together
 describe("Integration Tests", () => {
@@ -155,7 +155,7 @@ describe("Integration Tests", () => {
     });
 
     test("should correctly handle complex file names", async () => {
-      const { getminpath, isCSS } = await import("../src/utils");
+      const { getminpath } = await import("../src/utils");
 
       const complexNames = [
         "bundle.config.js",

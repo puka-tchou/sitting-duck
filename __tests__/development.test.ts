@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, jest, test, beforeEach } from "@jest/globals";
-import * as fs from "fs";
+import * as fs from "node:fs";
 import * as esbuild from "esbuild";
 import Watchpack from "watchpack";
 

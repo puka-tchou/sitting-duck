@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, test, beforeEach, afterEach } from "@jest/globals";
-import * as path from "path";
-import * as fs from "fs";
-import * as os from "os";
+import * as path from "node:path";
+import * as fs from "node:fs";
+import * as os from "node:os";
 
 describe("End-to-End Tests", () => {
   let testDir: string;
@@ -21,7 +21,7 @@ describe("End-to-End Tests", () => {
 
   describe("Full workflow: file detection and path generation", () => {
     test("should detect modules and generate correct minified paths", async () => {
-      const { isModule, getminpath, isCSS } = await import("../src/utils");
+      const { getminpath, isCSS } = await import("../src/utils");
 
       const testCases = [
         {

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, test } from "@jest/globals";
-import * as path from "path";
-import * as fs from "fs";
-import * as os from "os";
+import * as path from "node:path";
+import * as fs from "node:fs";
+import * as os from "node:os";
 
 describe("Edge Cases and Stress Tests", () => {
   describe("Edge cases: File name parsing", () => {
@@ -17,7 +17,7 @@ describe("Edge Cases and Stress Tests", () => {
     });
 
     test("should handle files with special characters", async () => {
-      const { getminpath, isCSS } = await import("../src/utils");
+      const { getminpath } = await import("../src/utils");
 
       const specialNames = [
         "file-name.js",
@@ -188,7 +188,7 @@ describe("Edge Cases and Stress Tests", () => {
     test("should handle Windows-style paths", async () => {
       const { getminpath } = await import("../src/utils");
 
-      const windowsPath = "C:\\Users\\app\\script.js";
+      const windowsPath = String.raw`C:\Users\app\script.js`;
       const result = getminpath(windowsPath);
 
       expect(result).toContain(".min.js");
@@ -225,7 +225,14 @@ describe("Edge Cases and Stress Tests", () => {
           fileName += chars.charAt(Math.floor(Math.random() * chars.length));
         }
 
-        const ext = i % 3 === 0 ? ".css" : i % 3 === 1 ? ".js" : ".txt";
+        let ext: string;
+        if (i % 3 === 0) {
+          ext = ".css";
+        } else if (i % 3 === 1) {
+          ext = ".js";
+        } else {
+          ext = ".txt";
+        }
         const fullName = fileName + ext;
 
         const minPath = getminpath(fullName);
@@ -300,7 +307,7 @@ describe("Edge Cases and Stress Tests", () => {
 
   describe("Edge cases: Unicode and special characters", () => {
     test("should handle file names with unicode characters", async () => {
-      const { getminpath, isCSS } = await import("../src/utils");
+      const { getminpath } = await import("../src/utils");
 
       const unicodeNames = [
         "файл.js",
