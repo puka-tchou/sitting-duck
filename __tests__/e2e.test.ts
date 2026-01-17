@@ -79,7 +79,11 @@ describe("End-to-End Tests", () => {
       const { isModule } = await import("../src/utils");
 
       const modulePath = path.join(process.cwd(), "fixtures", "module.js");
-      const nonModulePath = path.join(process.cwd(), "fixtures", "non-module.js");
+      const nonModulePath = path.join(
+        process.cwd(),
+        "fixtures",
+        "non-module.js",
+      );
 
       const isModuleResult = await isModule(modulePath);
       expect(isModuleResult).toBe(true);
@@ -141,7 +145,10 @@ console.log(x);
       const { isModule } = await import("../src/utils");
 
       const falseModule = path.join(testDir, "false-module.js");
-      fs.writeFileSync(falseModule, `// This is not a module comment\nconst x = 1;`);
+      fs.writeFileSync(
+        falseModule,
+        `// This is not a module comment\nconst x = 1;`,
+      );
 
       const result = await isModule(falseModule);
       // Should be false because it doesn't contain "// @MODULE"

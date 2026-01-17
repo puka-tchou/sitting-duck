@@ -201,7 +201,9 @@ describe("Edge Cases and Stress Tests", () => {
       const { getminpath } = await import("../src/utils");
 
       for (let i = 0; i < 1000; i++) {
-        expect(() => getminpath(`file${i}.${i % 2 === 0 ? "js" : "css"}`)).not.toThrow();
+        expect(() =>
+          getminpath(`file${i}.${i % 2 === 0 ? "js" : "css"}`),
+        ).not.toThrow();
       }
     });
 
@@ -209,7 +211,9 @@ describe("Edge Cases and Stress Tests", () => {
       const { isCSS } = await import("../src/utils");
 
       for (let i = 0; i < 1000; i++) {
-        expect(() => isCSS(`file${i}.${i % 2 === 0 ? "js" : "css"}`)).not.toThrow();
+        expect(() =>
+          isCSS(`file${i}.${i % 2 === 0 ? "js" : "css"}`),
+        ).not.toThrow();
       }
     });
 

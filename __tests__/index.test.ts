@@ -202,7 +202,7 @@ describe("Main minify function (index.ts)", () => {
       const callArgs = (fg.globSync as jest.Mock).mock.calls[0][0];
       // Check that patterns don't have leading/trailing spaces
       callArgs.forEach((pattern: string) => {
-        expect(pattern).not.toMatch(/(^\s+)|(\s+$)/);
+        expect(pattern).toBe(pattern.trim());
       });
     });
   });

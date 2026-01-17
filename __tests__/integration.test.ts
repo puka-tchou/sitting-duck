@@ -182,7 +182,11 @@ describe("Integration Tests", () => {
       const { isModule } = await import("../src/utils");
 
       const modulePath = path.join(process.cwd(), "fixtures", "module.js");
-      const nonModulePath = path.join(process.cwd(), "fixtures", "non-module.js");
+      const nonModulePath = path.join(
+        process.cwd(),
+        "fixtures",
+        "non-module.js",
+      );
 
       const isModuleFile = await isModule(modulePath);
       const isNonModuleFile = await isModule(nonModulePath);
@@ -206,7 +210,11 @@ describe("Integration Tests", () => {
     test("should handle non-existent files gracefully in isModule", async () => {
       const { isModule } = await import("../src/utils");
 
-      const nonExistentPath = path.join(process.cwd(), "fixtures", "does-not-exist.js");
+      const nonExistentPath = path.join(
+        process.cwd(),
+        "fixtures",
+        "does-not-exist.js",
+      );
 
       // Should reject or throw when file doesn't exist
       await expect(isModule(nonExistentPath)).rejects.toThrow();
@@ -218,7 +226,12 @@ describe("Integration Tests", () => {
       const { isCSS } = await import("../src/utils");
 
       const cssFiles = ["style.css", "theme.css", "output.css"];
-      const nonCssFiles = ["script.js", "index.html", "config.json", "README.md"];
+      const nonCssFiles = [
+        "script.js",
+        "index.html",
+        "config.json",
+        "README.md",
+      ];
 
       cssFiles.forEach((file) => {
         expect(isCSS(file)).toBe(true);
@@ -232,7 +245,11 @@ describe("Integration Tests", () => {
     test("should not match .css in middle of filename", async () => {
       const { isCSS } = await import("../src/utils");
 
-      const falseCssFiles = ["style.css.bak", "backup.css.old", "archive.css.tar.gz"];
+      const falseCssFiles = [
+        "style.css.bak",
+        "backup.css.old",
+        "archive.css.tar.gz",
+      ];
 
       falseCssFiles.forEach((file) => {
         expect(isCSS(file)).toBe(false);

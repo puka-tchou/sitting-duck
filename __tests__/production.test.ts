@@ -27,7 +27,11 @@ jest.mock("../src/options", () => ({
   },
 }));
 
-import { production, bundleWithSwc, bundleWithEsbuild } from "../src/production";
+import {
+  production,
+  bundleWithSwc,
+  bundleWithEsbuild,
+} from "../src/production";
 import * as utils from "../src/utils";
 
 describe("Production Mode Tests", () => {
@@ -41,9 +45,11 @@ describe("Production Mode Tests", () => {
       const source = "_test/script.js";
       const out = "_test/script.min.js";
 
-      (fs.readFile as jest.Mock).mockImplementation((src: any, opts: any, cb: any) => {
-        cb(null, "const x = 1;");
-      });
+      (fs.readFile as jest.Mock).mockImplementation(
+        (src: any, opts: any, cb: any) => {
+          cb(null, "const x = 1;");
+        },
+      );
 
       (fs.statSync as jest.Mock)
         .mockReturnValueOnce({ size: 15 })
@@ -54,9 +60,11 @@ describe("Production Mode Tests", () => {
         map: null,
       } as any);
 
-      (fs.writeFile as jest.Mock).mockImplementation((path: any, data: any, opts: any, cb: any) => {
-        cb(null);
-      });
+      (fs.writeFile as jest.Mock).mockImplementation(
+        (path: any, data: any, opts: any, cb: any) => {
+          cb(null);
+        },
+      );
 
       bundleWithSwc(source, false, out, 1);
 
@@ -73,17 +81,21 @@ describe("Production Mode Tests", () => {
       const out = "_test/error.min.js";
 
       const readError = new Error("Read failed");
-      (fs.readFile as jest.Mock).mockImplementation((src: any, opts: any, cb: any) => {
-        cb(readError);
-      });
+      (fs.readFile as jest.Mock).mockImplementation(
+        (src: any, opts: any, cb: any) => {
+          cb(readError);
+        },
+      );
 
       // Suppress console.error for this error handling test
-      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+      const consoleErrorSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       bundleWithSwc(source, false, out, 1);
 
       expect(fs.readFile).toHaveBeenCalled();
-      
+
       consoleErrorSpy.mockRestore();
     });
 
@@ -91,9 +103,11 @@ describe("Production Mode Tests", () => {
       const source = "_test/script.js";
       const out = "_test/script.min.js";
 
-      (fs.readFile as jest.Mock).mockImplementation((src: any, opts: any, cb: any) => {
-        cb(null, "const x = 1;");
-      });
+      (fs.readFile as jest.Mock).mockImplementation(
+        (src: any, opts: any, cb: any) => {
+          cb(null, "const x = 1;");
+        },
+      );
 
       (fs.statSync as jest.Mock)
         .mockReturnValueOnce({ size: 15 })
@@ -105,21 +119,23 @@ describe("Production Mode Tests", () => {
       } as any);
 
       let writeFileCallCount = 0;
-      (fs.writeFile as jest.Mock).mockImplementation((path: any, data: any, opts: any, cb: any) => {
-        writeFileCallCount++;
-        cb(null);
+      (fs.writeFile as jest.Mock).mockImplementation(
+        (path: any, data: any, opts: any, cb: any) => {
+          writeFileCallCount++;
+          cb(null);
 
-        // Check after both files are written
-        if (writeFileCallCount === 2) {
-          expect(fs.writeFile).toHaveBeenCalledWith(
-            `${out}.map`,
-            '{"version":3}',
-            { encoding: "utf-8" },
-            expect.any(Function),
-          );
-          done();
-        }
-      });
+          // Check after both files are written
+          if (writeFileCallCount === 2) {
+            expect(fs.writeFile).toHaveBeenCalledWith(
+              `${out}.map`,
+              '{"version":3}',
+              { encoding: "utf-8" },
+              expect.any(Function),
+            );
+            done();
+          }
+        },
+      );
 
       bundleWithSwc(source, true, out, 1);
     });
@@ -128,11 +144,15 @@ describe("Production Mode Tests", () => {
       const source = "_test/script.js";
       const out = "_test/script.min.js";
 
-      (fs.readFile as jest.Mock).mockImplementation((src: any, opts: any, cb: any) => {
-        cb(null, "const x = 1;");
-      });
+      (fs.readFile as jest.Mock).mockImplementation(
+        (src: any, opts: any, cb: any) => {
+          cb(null, "const x = 1;");
+        },
+      );
 
-      (swc.minify as jest.Mock).mockRejectedValue(new Error("SWC minify failed") as any);
+      (swc.minify as jest.Mock).mockRejectedValue(
+        new Error("SWC minify failed") as any,
+      );
 
       bundleWithSwc(source, false, out, 1);
 
@@ -209,7 +229,9 @@ describe("Production Mode Tests", () => {
       const source = "_test/module.js";
       const out = "_test/module.min.js";
 
-      (esbuild.build as jest.Mock).mockRejectedValue(new Error("Build failed") as any);
+      (esbuild.build as jest.Mock).mockRejectedValue(
+        new Error("Build failed") as any,
+      );
 
       bundleWithEsbuild(source, false, out, 1);
 
@@ -264,9 +286,11 @@ describe("Production Mode Tests", () => {
       (utils.isModule as jest.Mock).mockResolvedValue(false as any);
       (utils.isCSS as jest.Mock).mockReturnValue(false);
 
-      (fs.readFile as jest.Mock).mockImplementation((src: any, opts: any, cb: any) => {
-        cb(null, "const x = 1;");
-      });
+      (fs.readFile as jest.Mock).mockImplementation(
+        (src: any, opts: any, cb: any) => {
+          cb(null, "const x = 1;");
+        },
+      );
 
       (fs.statSync as jest.Mock)
         .mockReturnValueOnce({ size: 15 })
@@ -277,9 +301,11 @@ describe("Production Mode Tests", () => {
         map: null,
       } as any);
 
-      (fs.writeFile as jest.Mock).mockImplementation((path: any, data: any, opts: any, cb: any) => {
-        cb(null);
-      });
+      (fs.writeFile as jest.Mock).mockImplementation(
+        (path: any, data: any, opts: any, cb: any) => {
+          cb(null);
+        },
+      );
 
       production(files, false);
 
@@ -288,7 +314,9 @@ describe("Production Mode Tests", () => {
 
     test("should handle isModule errors", () => {
       const files = ["_test/error.js"];
-      (utils.isModule as jest.Mock).mockRejectedValue(new Error("Read error") as any);
+      (utils.isModule as jest.Mock).mockRejectedValue(
+        new Error("Read error") as any,
+      );
 
       production(files, false);
 
@@ -304,9 +332,11 @@ describe("Production Mode Tests", () => {
         .mockReturnValueOnce(false)
         .mockReturnValueOnce(true);
 
-      (fs.readFile as jest.Mock).mockImplementation((src: any, opts: any, cb: any) => {
-        cb(null, "const x = 1;");
-      });
+      (fs.readFile as jest.Mock).mockImplementation(
+        (src: any, opts: any, cb: any) => {
+          cb(null, "const x = 1;");
+        },
+      );
 
       (fs.statSync as jest.Mock).mockReturnValue({ size: 100 });
 
@@ -320,9 +350,11 @@ describe("Production Mode Tests", () => {
         warnings: [],
       } as any);
 
-      (fs.writeFile as jest.Mock).mockImplementation((path: any, data: any, opts: any, cb: any) => {
-        cb(null);
-      });
+      (fs.writeFile as jest.Mock).mockImplementation(
+        (path: any, data: any, opts: any, cb: any) => {
+          cb(null);
+        },
+      );
 
       production(files, false);
 
